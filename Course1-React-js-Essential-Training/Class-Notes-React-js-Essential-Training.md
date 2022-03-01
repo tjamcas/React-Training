@@ -39,3 +39,26 @@
             -  contains all the code files that we write for an app
         -  `appName/public`
             -  contains assets like an index.html and logos files that will be used to build the app
+-  Creating React elements
+    -  `index.js`:    
+        ```
+        import React from "react";
+        import ReactDOM from "react-dom";
+        import "./index.css";
+
+        ReactDOM.render(
+          React.createElement(
+            "h1",
+            { style: { color: "blue" } },
+            "Heyyy Everyone!"
+          ),
+          document.getElementById("root")
+        );
+        ```
+    - `React.createElement(arg1, arg2, arg3)`
+        - `arg1` is the type of HTML element that you want to add
+        - `arg2` contains parameters for the HTML element -- if none then specify `null`
+        - `arg3` is the element value -- in this case, the text for the `h1` header
+    - `document.getElementById(arg1)`
+        - `arg1` specifies where you want to insert the newly created element -- in this case the newly created `h1` header is to be inserted into an element with an id of "root" 
+
