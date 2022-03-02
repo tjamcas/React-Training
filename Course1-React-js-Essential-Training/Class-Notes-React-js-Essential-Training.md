@@ -265,7 +265,7 @@
 
         export default App;
         ```
-        - In the `Main(props)' function, we created the `props.dishes` property that holds the array `dishes`
+        - In the `Main(props)` function, we created the `props.dishes` property that holds the array `dishes`
             - `<ul style={{ textAlign: "left" }}> {props.dishes.map(dish => ( <li>{dish}</li> ))} </ul>`
             - inside the `ul` tags, we 1. map the `dishes` array to a new array that takes each item in `dishes` and sandwiches it between `li` tags, and then 2. passes the new array through the `props` parameter
         - We reference the `props.dishes` property in the `App()` function
