@@ -55,10 +55,35 @@
           document.getElementById("root")
         );
         ```
-    - `React.createElement(arg1, arg2, arg3)`
-        - `arg1` is the type of HTML element that you want to add
-        - `arg2` contains parameters for the HTML element -- if none then specify `null`
-        - `arg3` is the element value -- in this case, the text for the `h1` header
-    - `document.getElementById(arg1)`
-        - `arg1` specifies where you want to insert the newly created element -- in this case the newly created `h1` header is to be inserted into an element with an id of "root" 
+    - the `ReactDOM.render(arg1, arg2)` function has two arguments:
+        - `arg1`is the element that you want create using `React.createElement(argA, argB, argC)`
+        - `arg2` specifies the location where you want to insert the new element using `document.getElementById(argD)`
+    - `React.createElement(argA, argB, argC)`
+        - `argA` is the type of HTML element/tag that you want to add
+        - `argB` contains properties for the HTML element -- if none then specify `null`
+        - `argC` is the element value -- in this case, the text for the `h1` header
+    - `document.getElementById(argD)`
+        - `argD` specifies where you want to insert the newly created element -- in this case the newly created `h1` header is to be inserted into an element with an id of "root"
+    - _Note:_ in this example code snippet we have removed `React.StrictMode` which generates warnings if any code is outside of a coding best practice.
+- Refactoring elements using JSX
+    - JSX - Javascript as XML - is a javaScript language extension that allows you to write HTML tags directly in JavaScript
+    - For example:
+    ```
+    import React from "react";
+    import ReactDOM from "react-dom";
+    import "./index.css";
 
+    ReactDOM.render(
+      <ul>
+        <li>Monday</li>
+        <li>Tuesday</li>
+        <li>Wednesday</li>
+      </ul>,
+      document.getElementById("root")
+    );
+    ```    
+    - JSX is the code between and including the `<ul>` and `</ul>` start and end tags.
+    - When you use `create-react-app`, the Babel compiler is used to correctly interpret JSX code that it finds embedded in the JavaScript code.
+    - For more information on the Babel JavaScript compiler, go to: <https://babeljs.io/>
+
+### Section 3: React Components
