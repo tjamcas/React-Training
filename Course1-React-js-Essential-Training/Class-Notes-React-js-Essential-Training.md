@@ -205,6 +205,7 @@
             - `<p> We serve the most {props.adjective} food around. </p>`
             - Inside the curly braces we use a dot notation with `props`to define the property's name.
             - Here, we're creating the `adjective` property with the `Main` component
-        - In the `App` function, we can reference the newly defined component property
+        - In the `App` function, we can reference the newly defined component property and assign it a value
             - `<Main adjective="amazing" />`
+            - Here, the `App` component refers to the `Main` component for which we have defined a property named `adjective` which has a value of "amazing".
 
