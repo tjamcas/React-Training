@@ -208,4 +208,65 @@
         - In the `App` function, we can reference the newly defined component property and assign it a value
             - `<Main adjective="amazing" />`
             - Here, the `App` component refers to the `Main` component for which we have defined a property named `adjective` which has a value of "amazing".
+            - Inside the curly braces we use a dot notation with `props`to define the property's name.
+- Working with lists(i.e.,sending array data to components)
+    - So far in the exaamples above we've passed properties to components in the form of string and functions (i.e., the date function in the last example). in the next example, we will pass array data into a component tree.
+    - Example, `App.js`:
+        ```
+        import React from "react";
+        import "./App.css";
 
+        function Header(props) {
+          return (
+            <header>
+              <h1>{props.name}'s Kitchen</h1>
+            </header>
+          );
+        }
+
+        function Main(props) {
+          return (
+            <section>
+              <p>
+                We serve the most {props.adjective} food around.
+              </p>
+              <ul style={{ textAlign: "left" }}>
+                {props.dishes.map(dish => (
+                  <li>{dish}</li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
+        function Footer(props) {
+          return (
+            <footer>
+              <p>Copyright {props.year}</p>
+            </footer>
+          );
+        }
+
+        const dishes = [
+          "Macaroni and Cheese",
+          "Salmon",
+          "Tofu with Vegetables"
+        ];
+
+        function App() {
+          return (
+            <div className="App">
+              <Header name="Horacio" />
+              <Main adjective="amazing" dishes={dishes} />
+              <Footer year={new Date().getFullYear()} />
+            </div>
+          );
+        }
+
+        export default App;
+        ```
+            - In the `Main(props)' function, we created the `props.dishes` property that holds the array `dishes`
+                - `<ul style={{ textAlign: "left" }}> {props.dishes.map(dish => ( <li>{dish}</li> ))} </ul>`
+                - inside the `ul` tags, we 1. map the `dishes` array to a new array that takes each item in `dishes` and sandwiches it between `li` tags, and then 2. passes the new array through the `props` parameter
+            - We reference the `props.dishes` property in the `App()` function
+                - `<Main adjective="amazing" dishes={dishes} />`
