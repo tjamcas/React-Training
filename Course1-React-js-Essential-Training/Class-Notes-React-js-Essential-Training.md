@@ -270,3 +270,5 @@
             - inside the `ul` tags, we 1. map the `dishes` array to a new array that takes each item in `dishes` and sandwiches it between `li` tags, and then 2. passes the new array through the `props` parameter
         - We reference the `props.dishes` property in the `App()` function
             - `<Main adjective="amazing" dishes={dishes} />`
+        - _For more information on the `map()` method see_ <https://www.w3schools.com/jsref/jsref_map.asp>
+        - _For more information on the `=>` function see_ <https://www.w3schools.com/js/js_arrow_function.asp>
