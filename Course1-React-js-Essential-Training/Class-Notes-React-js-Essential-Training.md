@@ -153,7 +153,7 @@
 - Adding Component Properties
     - Every React component has access to the object called `props`. 
         - 'props' is passed into functions.
-        - The `prop`s object holds all of the different properties for our component.
+        - The `props` object holds all of the different properties for our component.
     - Think of props as being a mini-container - like a little backpack - that you can place information in for every single component.
         - When the component is rendered, we pass the properties into the component, and then display them using dot notation.
     - Example:    
