@@ -87,3 +87,124 @@
     - For more information on the Babel JavaScript compiler, go to: <https://babeljs.io/>
 
 ### Section 3: React Components
+- Components are pieces or building blocks of UI that we use to describe one part of an application. _More specifically, components are functions that return UI._
+- A component is described in a JavaScript file, `componentName.js`
+    - In the JavaScript file we define a function that returns JSX
+    - At the end of the `ComponentName.js` file you export `ComponentName`, 
+        - `export default ComponentName;`
+    - and ...
+    - ... at the beginning of the `index.js` file you import `componentName`:
+        - `import ComponentName from "./ComponentName"`
+- Example
+    - `index.js:`
+        ```
+        import React from "react";
+        import ReactDOM from "react-dom";
+        import "./index.css";
+        import App from "./App";
+
+        ReactDOM.render(<App />, document.getElementById("root"));
+        ```
+        - The last code line, `ReactDOM.render(<App />, document.getElementById("root"));`, specifies that the "App" component will be rendered to the DOM and inserted into the "root" element
+    - `App.js`
+        ```
+        import React from "react";
+        import "./App.css";    
+
+        function Header() {
+          return (
+            <header>
+              <h1>Eve's Kitchen</h1>
+            </header>
+          );
+        }    
+
+        function Main() {
+          return (
+            <section>
+              <p>We serve the most delicious food around.</p>
+            </section>
+          );
+        }    
+
+        function Footer() {
+          return (
+            <footer>
+              <p>It's true.</p>
+            </footer>
+          );
+        }    
+
+        function App() {
+          return (
+            <div className="App">
+              <Header />  {/* Refers to Header() function defined above */}
+              <Main />  {/* Refers to Main() function defined above */}
+              <Footer />  {/* Refers to Footer() function defined above */}
+            </div>
+          );
+        }    
+
+        export default App;
+        ```
+        - The `App.js` file contains the `App()` function as well as the `Header()`, `Main()`, and `Footer()` functions
+        - The `App()` function returns to the `index.js` file the `Header()`, `Main()`, and `Footer()` functions to be rendered into the DOM at element named "root"
+        - The `App.js` file organizes and returns the components for rendering
+- Adding Component Properties
+    - Every React component has access to the object called `props`. 
+        - 'props' is passed into functions.
+        - The `prop`s object holds all of the different properties for our component.
+    - Think of props as being a mini-container - like a little backpack - that you can place information in for every single component.
+        - When the component is rendered, we pass the properties into the component, and then display them using dot notation.
+    - Example:    
+        ```
+        import React from "react";
+        import "./App.css";
+
+        function Header(props) {
+          return (
+            <header>
+              <h1>{props.name}'s Kitchen</h1>
+            </header>
+          );
+        }
+
+        function Main(props) {
+          return (
+            <section>
+              <p>
+                We serve the most {props.adjective} food around.
+              </p>
+            </section>
+          );
+        }
+
+        function Footer(props) {
+          return (
+            <footer>
+              <p>Copyright {props.year}</p>
+            </footer>
+          );
+        }
+
+        function App() {
+          return (
+            <div className="App">
+              <Header name="Horacio" />
+              <Main adjective="amazing" />
+              <Footer year={new Date().getFullYear()} />
+            </div>
+          );
+        }
+
+        export default App;
+        ```
+        - `props` is added as an argument to the `Header()`, `Main()`, and `Footer()` functions
+            - `function Main(props) { ... }`
+        - Hot spots are designated in the `Header()`, `Main()`, and `Footer()` functions with double curly braces - { }
+            - `<p> We serve the most {props.adjective} food around. </p>`
+            - Inside the curly braces we use a dot notation with `props`to define the property's name.
+            - Here, we're creating the `adjective` property with the `Main` component
+        - In the `App` function, we can reference the newly defined component property
+            - `<Main adjective="amazing" />`
+
