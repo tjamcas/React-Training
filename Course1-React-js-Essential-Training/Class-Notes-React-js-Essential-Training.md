@@ -462,4 +462,4 @@
             );
         ```
         - In the example above we repaced `<React.fragment> ... </React.fragment>` with empty tags `<> ... </>`
-        - It should be noted that when youremove wrapping `<div>`'s and `<section>`'s you lose the ability to add styles to the component elements as a group, but there are other ways to apply styling.
+        - It should be noted that when you remove wrapping `<div>`'s and `<section>`'s you lose the ability to add styles to the component elements as a group, but there are other ways to apply styling.
