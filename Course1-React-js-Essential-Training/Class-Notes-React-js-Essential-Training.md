@@ -1,5 +1,5 @@
 # Course 1: React.js Essential Training
-## Class Notes
+## Class Notes / Section 1 - 3
 
 ### Section 1: what is React
 
@@ -67,6 +67,16 @@
     - _Note:_ in this example code snippet we have removed `React.StrictMode` which generates warnings if any code is outside of a coding best practice.
 - Refactoring elements using JSX
     - JSX - Javascript as XML - is a javaScript language extension that allows you to write HTML tags directly in JavaScript
+        - for more information, go to <https://reactjs.org/docs/introducing-jsx.html>
+        - You can put any valid JavaScript expression inside the curly braces in JSX. For example, `2 + 2`, `user.firstName`, or `formatName(user)` are all valid JavaScript expressions.
+        - Specifying Attributes with JSX:
+            - You may use quotes to specify string literals as attributes:
+                - `const element = <a href="https://www.reactjs.org"> link </a>;
+            - You may also use curly braces to embed a JavaScript expression in an attribute:
+                - `const element = <img src={user.avatarUrl}></img>;`
+            - Don’t put quotes around curly braces when embedding a JavaScript expression in an attribute. You should either use quotes (for string values) or curly braces (for expressions), but not both in the same attribute.
+            - ___Warning___: Since JSX is closer to JavaScript than to HTML, React DOM uses camelCase property naming convention instead of HTML attribute names.
+                - For example, `class` becomes `className` in JSX, and `tabindex` becomes `tabIndex`.
     - For example:
     ```
     import React from "react";
@@ -391,4 +401,65 @@
         export default App;
         ```
 - Using Fragments
-    - 
+    -  React rule with JSX: WWe can't render two sibling components unless they're wrapped in some sort of another tag, like a div or a section or something like this. 
+    -  If you want to render two components, then you can wrap them in a fragment. IN the first pattern exampe, we wrap two components between `<div>` starting and ending tags.:
+    -  ___First fragment pattern:___
+        ```
+            import React from "react";
+            import ReactDOM from "react-dom";
+            import "./index.css";
+            import App from "./App";
+
+            function AppTwo() {
+              return <h1>This is the second App></h1>
+            }
+            
+            ReactDOM.render(
+              <div>
+                <App />, document.getElementById("root")
+                <AppTwo />
+              </div>,
+              document.getElementById("root")
+            );
+        ```
+    -  This React rule is a limitation which causes a lot of extra wrapping `div`'s that have been added to all sorts of different projects. So one way to avoid inserting a lot of "wrapping" tags into the DOM is to use React.Fragment
+    -  ___Second fragment pattern:___
+        ```
+            import React from "react";
+            import ReactDOM from "react-dom";
+            import "./index.css";
+            import App from "./App";
+
+            function AppTwo() {
+              return <h1>This is the second App></h1>
+            }
+            
+            ReactDOM.render(
+              <React.fragment>
+                <App />, document.getElementById("root")
+                <AppTwo />
+              </React.fragment>,
+              document.getElementById("root")
+            );
+        ```
+    - ___Third fragment pattern - a short-hand pattern:___
+        ```
+            import React from "react";
+            import ReactDOM from "react-dom";
+            import "./index.css";
+            import App from "./App";
+
+            function AppTwo() {
+              return <h1>This is the second App></h1>
+            }
+            
+            ReactDOM.render(
+              <>
+                <App />, document.getElementById("root")
+                <AppTwo />
+              </>,
+              document.getElementById("root")
+            );
+        ```
+        - In the example above we repaced `<React.fragment> ... </React.fragment>` with empty tags `<> ... </>`
+        - It should be noted that when youremove wrapping `<div>`'s and `<section>`'s you lose the ability to add styles to the component elements as a group, but there are other ways to apply styling.
