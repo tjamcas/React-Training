@@ -247,7 +247,7 @@
           );
         }
 
-        const dishes = [
+        const dishNames = [
           "Macaroni and Cheese",
           "Salmon",
           "Tofu with Vegetables"
@@ -257,7 +257,7 @@
           return (
             <div className="App">
               <Header name="Horacio" />
-              <Main adjective="amazing" dishes={dishes} />
+              <Main adjective="amazing" dishes={dishNames} />
               <Footer year={new Date().getFullYear()} />
             </div>
           );
@@ -265,9 +265,11 @@
 
         export default App;
         ```
-        - In the `Main(props)` function, we created the `props.dishes` property that holds the array `dishes`
+        - In the `Main(props)` function, we created the `props.dishes` property
             - `<ul style={{ textAlign: "left" }}> {props.dishes.map(dish => ( <li>{dish}</li> ))} </ul>`
-            - inside the `ul` tags, we 1. map the `dishes` array to a new array that takes each item in `dishes` and sandwiches it between `li` tags, and then 2. passes the new array through the `props` parameter
+        - When the `App()` function calls the `Main()` function, it specifies that the property`dishes={dishNames}`
+        - `dishNames` is a defined array constant
+        - In the return statement of the `App()` function and inside the `ul` tags, we 1. map the `dishNames` array to a new array that takes each item in `dishNames` and sandwiches it between `li` tags, and then 2. passes this new array through the `props` parameter
         - We reference the `props.dishes` property in the `App()` function
             - `<Main adjective="amazing" dishes={dishes} />`
         - _For more information on the `map()` method see_ <https://www.w3schools.com/jsref/jsref_map.asp>
