@@ -416,7 +416,7 @@
             
             ReactDOM.render(
               <div>
-                <App />, document.getElementById("root")
+                <App />
                 <AppTwo />
               </div>,
               document.getElementById("root")
@@ -436,7 +436,7 @@
             
             ReactDOM.render(
               <React.fragment>
-                <App />, document.getElementById("root")
+                <App />
                 <AppTwo />
               </React.fragment>,
               document.getElementById("root")
@@ -455,7 +455,7 @@
             
             ReactDOM.render(
               <>
-                <App />, document.getElementById("root")
+                <App />
                 <AppTwo />
               </>,
               document.getElementById("root")
