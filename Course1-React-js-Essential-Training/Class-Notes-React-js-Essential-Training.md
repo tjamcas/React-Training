@@ -274,3 +274,58 @@
             - `<Main adjective="amazing" dishes={dishes} />`
         - _For more information on the `map()` method see_ <https://www.w3schools.com/jsref/jsref_map.asp>
         - _For more information on the `=>` function see_ <https://www.w3schools.com/js/js_arrow_function.asp>
+- Adding Keys to List Items:
+    - In the previous example, the console raises a warning that each child in a list must have a unique key property. This is because `dishNames` is an array of strings without keys
+    - To remedy this we can map `dishNames`, which is a simple array of strings, to an array of objects with each object having a key and value pair.
+        ```
+        import React from "react";
+        import "./App.css";
+
+        function Header(props) {
+          ....
+        }
+
+        function Main(props) {
+          return (
+            <section>
+              <p>
+                We serve the most {props.adjective} food around.
+              </p>
+              <ul style={{ textAlign: "left" }}>
+                {props.dishes.map(dish => (
+                  <li key={dish.id}>{dish.title}</li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
+        function Footer(props) {
+          ....
+        }
+
+        const dishNames = [
+          "Macaroni and Cheese",
+          "Salmon",
+          "Tofu with Vegetables"
+        ];
+
+        const dishNamesObjects = dishNames.map((dish, i) => ({
+          id: i,
+          title: dish
+        }));
+
+        function App() {
+          return (
+            <div className="App">
+              <Header name="Horacio" />
+              <Main adjective="amazing" dishes={dishNamesObjects} />
+              <Footer year={new Date().getFullYear()} />
+            </div>
+          );
+        }
+
+        export default App;
+        ```
+    - To create the array of objects, we write a short transformation function as seen in the code snippet directly below. This function will `map` over the `dishNames`, and for each `dish`, it returns an object (___note:___ whenever we return an object from a function like this, in line, we need to wrap it in parenthesis). So the `id` will be `i` and the `title` will be dish. 
+        - `{props.dishes.map(dish => ( <li key={dish.id}>{dish.title}</li> ))}`
