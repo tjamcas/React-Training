@@ -329,3 +329,66 @@
         ```
     - To create the array of objects, we write a short transformation function as seen in the code snippet directly below. This function will `map` over the `dishNames`, and for each `dish`, it returns an object (___note:___ whenever we return an object from a function like this, in line, we need to wrap it in parenthesis). So the `id` will be `i` and the `title` will be dish. 
         - `{props.dishes.map(dish => ( <li key={dish.id}>{dish.title}</li> ))}`
+- Displaying Image with React
+    - To add images in our app:
+        - First, import the image as a variable. In this example the variable is named `restaurant`.
+            - `import restaurant from "./restaurant.jpg";`
+        - Second, pass the name of that variable into the image tag's ( i.e. `<img />) source (i.e., `src/`) attribute. The variable name is JavaScript code reference so that goes between double curly braces `{ ... }`.
+            - <img src={restaurant} height={200} alt="napkin and silverware at a restaurant table" />
+        - Third, You may have to set a height or other properties of that image. See snippet above.
+        - Finally, add an alt tag so that our application is as accessible as possible - the alt tag value is a string so that goes between quotes `"..."`.See snippet above.
+    - See the following example for the four steps tied together:
+        ```
+        ...
+        import restaurant from "./restaurant.jpg";
+
+        function Header(props) {
+          ...
+        }
+
+        function Main(props) {
+          return (
+            <section>
+              <p>
+                We serve the most {props.adjective} food around.
+              </p>
+              <img
+                src={restaurant}
+                height={200}
+                alt="napkin and silverware at a restaurant table"
+              />
+              <ul style={{ textAlign: "left" }}>
+                {props.dishes.map(dish => (
+                  <li key={dish.id}>{dish.title}</li>
+                ))}
+              </ul>
+            </section>
+          );
+        }
+
+        function Footer(props) {
+          ...
+        }
+
+        const dishNames = [
+          ...
+        ];
+
+        const dishNamesObjects = dishes.map((dish, i) => ({
+          ...
+        }));
+
+        function App() {
+          return (
+            <div className="App">
+              <Header name="Horacio" />
+              <Main adjective="amazing" dishes={dishNamesObjects} />
+              <Footer year={new Date().getFullYear()} />
+            </div>
+          );
+        }
+
+        export default App;
+        ```
+- Using Fragments
+    - 
