@@ -82,3 +82,36 @@
       `function App({ authorized }) { ... }.`     
       And then we can reference `authorized` again in the conditional ternary operator
     - This can simplify and improve readability of your code when it refers to many key-value pairs in the `props` object.
+- Understanding the Use State Hook
+  - Managing state in a React application is important. The most modern way to handle state variables in an app is to use a function called `useState`.
+  - Supplemental information on the `useState` function can be found on W3Schools at <https://www.w3schools.com/react/react_usestate.asp>
+  - The `useState(arg)` function returns an array with two items.
+    - The first item is the state variable - it provides the state of the component function - and it can be any type: boolean, string, integer, etc.
+    - The second item is a function that updates the state variable
+    - the argument `arg` is the initial state 
+  - Example:
+    ```
+    import React, { useState } from "react";
+    import "./App.css";
+
+    function App() {
+      const [emotion, setEmotion] = useState("happy");
+      return (
+        <>
+          <h1>Current emotion is: {emotion}.</h1>
+          <button onClick={() => setEmotion("frustrated")}>
+            Frustrate
+          </button>
+          <button onClick={() => setEmotion("enthusiastic")}>
+            Enthuse
+          </button>
+        </>
+      );
+    }
+
+    export default App;
+    ```
+      - Looking closer at this line in the `App()` function, `const [emotion, setEmotion] = useState("happy");`
+        - We are using array deconstruction to name the state variable to `emotion`, and
+        - to name the state updater function to `setEmotion`
+          - It is convention to name the state updater function `setState-name` -- in this case state name is 'emotion' and the updater is, then, `setEmotion`
