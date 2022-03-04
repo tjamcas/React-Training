@@ -55,4 +55,5 @@
       )
     }
     ```
-    - the `?` format used in the refactored code above is the ___JavaScript conditional (ternary) operator___ and more information can be found at <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator>
+    - the `?` format used in the refactored code above is the ___JavaScript conditional (ternary) operator___ and more information on its use can be found at <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator>.
+    - the conditional ternary operator is available in Java as well.
