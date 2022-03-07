@@ -217,12 +217,55 @@
   - The `useReducer` function is similar, yet an upgrade, to `useState`
     - Syntax: `useReducer(<reducer>, <initialState>)`
     - The `useReducer` function takes in the component's state and returns a new state
-    - It allows the developer to abstract and reduce the amount of code
-  - Example, here is the more complex code to track the state of a check box:
+  - Example - here is the more complex code to track the state of a check box:
     ```
-    
+    import React, {useState} from "react";
+    import './App.css';
+
+    function App() {
+      const [checked, setChecked] = useState(false);
+
+      return (
+        <>
+          <input 
+            type= "checkbox" 
+            value={checked} 
+            onChange={() => setChecked((checked) => !checked)}
+          />
+          <p>{checked ? "checked" : "not checked"}</p>
+        </>
+      );
+    }
+
+    export default App;
     ```
-  - Example here is the simplified and reduced code version of the same functionality:
+  - Example - here  we create a ___reducer___ function and name it `toggle`. A reducer function takes in a component's state, and changes it.
+    ```
+    import React, {useState} from "react";
+    import './App.css';
+
+    function App() {
+      const [checked, setChecked] = useState(false);
+
+      function toggle() {
+        setChecked((checked) => !checked);
+      }
+
+      return (
+        <>
+          <input 
+            type= "checkbox" 
+            value={checked} 
+            onChange={toggle}
+          />
+          <p>{checked ? "checked" : "not checked"}</p>
+        </>
+      );
+    }
+
+    export default App;
+    ```
+  - Example - here is the final, simplified and reduced code version of the same functionality that implements the `useReducer` React hook:
     ```
     import React, { useReducer } from "react";
     import "./App.css";
@@ -246,3 +289,12 @@
 
     export default App;
     ```
+    - in the code line, 
+      ```
+      const [checked, toggle] = useReducer(
+        checked => !checked,
+        false
+      );
+      ```
+    - `checked => !checked` is the first argument of the `UseReducer` hook - i.e., the ___reducer___ function. And using array deconstruction, the reducer function has been named `toggle`, which is referenced in the `<input>` tag's `onChange={toggle}` property.
+    - `false` is the second argument -- i.e., the initial state
