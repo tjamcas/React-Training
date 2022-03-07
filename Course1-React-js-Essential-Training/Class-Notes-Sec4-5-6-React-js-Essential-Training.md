@@ -216,7 +216,8 @@
 - Incorporating useReducer
   - The `useReducer` function is similar, yet an upgrade, to `useState`
     - Syntax: `useReducer(<reducer>, <initialState>)`
-    - The `useReducer` function takes in the component's state and returns a new state
+    - The `useReducer` function takes in the component's state and returns a new state.
+    - More specifically, the useReducer Hook returns an array with the first element being the current state and the second element being the reducer function AKA dispatch method.
   - Example - here is the more complex code to track the state of a check box:
     ```
     import React, {useState} from "react";
@@ -298,3 +299,4 @@
       ```
     - `checked => !checked` is the first argument of the `UseReducer` hook - i.e., the ___reducer___ function. And using array deconstruction, the reducer function has been named `toggle`, which is referenced in the `<input>` tag's `onChange={toggle}` property.
     - `false` is the second argument -- i.e., the initial state
+    - __Remember:__ the useReducer Hook returns an array with the ___first___ element being the current state and the ___second___ element being the reducer function AKA dispatch method.
