@@ -147,7 +147,7 @@
   - ___Side note___ on using ` `S{...}` `in the console.log - AKA 'Template literals' AKA 'Template strings'.
     - For a good explanation, see the StackOverflow article, <https://stackoverflow.com/questions/35835362/what-does-dollar-sign-and-curly-braces-mean-in-a-string-in-javascript> as well as <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals>
   - Examples:
-    - The following example is basic use of `useEffect` to og cominent state to the console log
+    - The following example is basic use of `useEffect` to log the `emotion` state to the console
       ```
       import React, { useState, useEffect } from "react";
       import './App.css';
@@ -177,7 +177,7 @@
 
       export default App;
       ```
-    - The following snippet revises the example above by adding dependency arrays to two `useEffect` statements in order to track two separate state variables (`emmotion` and `secondary`) in the console log
+    - The following snippet revises the example above by 1. creating two state variables (`emmotion` and `secondary`), and 2. adding two `useEffect` statements - each with dependency arrays - in order to log/track the two state variables (`emotion` and `secondary`) in the console.
       ```
       function App() {
         const [emotion, setEmotion] = useState("happy");
