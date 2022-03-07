@@ -214,3 +214,35 @@
       }
       ```
 - Incorporating useReducer
+  - The `useReducer` function is similar, yet an upgrade, to `useState`
+    - Syntax: `useReducer(<reducer>, <initialState>)`
+    - The `useReducer` function takes in the component's state and returns a new state
+    - It allows the developer to abstract and reduce the amount of code
+  - Example, here is the more complex code to track the state of a check box:
+    ```
+    
+    ```
+  - Example here is the simplified and reduced code version of the same functionality:
+    ```
+    import React, { useReducer } from "react";
+    import "./App.css";
+
+    function App() {
+      const [checked, toggle] = useReducer(
+        checked => !checked,
+        false
+      );
+      return (
+        <>
+          <input
+            type="checkbox"
+            value={checked}
+            onChange={toggle}
+          />
+          <p>{checked ? "checked" : "not checked"}</p>
+        </>
+      );
+    }
+
+    export default App;
+    ```
