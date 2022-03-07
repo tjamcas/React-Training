@@ -118,9 +118,10 @@
       - ___Note:___ For a refesher on the use of the JavaScript `=>` arrow function, see <https://www.w3schools.com/js/js_arrow_function.asp>. The arrow `=>`function is shorthand syntax to declare a JavaScript function.
 - Working with useEffect
   - From W3Schools at <https://www.w3schools.com/react/react_useeffect.asp>:
-    - The `useEffect` Hook allows you to perform side effects in your components, like: consle messaging, animations, fetching data, directly updating the DOM, and timers.
+    - The `useEffect` Hook allows you to perform side effects in your components, like: console messaging, animations, fetching data, directly updating the DOM, and timers.
     - useEffect accepts two arguments. The second argument is optional:
       - `useEffect(<function>, <dependency>)`
+    - `useEffect` runs on every render - i.e., whenever the DOM (is it on the DOM changing or a value in the DOM or are these the same thing?) changes causing a render to happen.
     - You can control how side effects run based on how you use the second argument:
       - Don't pass the second dependency argument, and the side effect runs every time the component is rendered
         ```
