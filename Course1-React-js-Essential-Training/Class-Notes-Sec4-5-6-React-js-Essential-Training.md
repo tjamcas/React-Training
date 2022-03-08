@@ -114,7 +114,9 @@
       - Looking closer at this line in the `App()` function, `const [emotion, setEmotion] = useState("happy");`
         - We are using array deconstruction to name the state variable to `emotion`, and
         - to name the state updater function to `setEmotion`
-          - It is convention to name the state updater function `setState-name` -- in this case state name is 'emotion' and the updater is, then, `setEmotion`
+          - It is convention to name the state updater function `setState-name` -- in this case state name is 'emotion' and the updater is, then, `setEmotion`.
+          - The state updater function can update the value of its state - e.g., `SetEmotion("angry")` changes `emotion` to have value "angry".
+          - If you don't provide the state update function with a value, then it returns the current value of the state - e.g., `setEmotion` returns the current value of `emotion`.
       - ___Note:___ For a refesher on the use of the JavaScript `=>` arrow function, see <https://www.w3schools.com/js/js_arrow_function.asp>. The arrow `=>`function is shorthand syntax to declare a JavaScript function.
 - Working with useEffect
   - From W3Schools at <https://www.w3schools.com/react/react_useeffect.asp>:
@@ -308,7 +310,7 @@
     - A Web API is an application programming interface for the Web.
     - The `fetch` API interface allows web browser to make HTTP requests to web servers. <https://www.w3schools.com/js/js_api_fetch.asp>
     - We can then attach the `then` function to the returned results and cleanup the output. <https://stackoverflow.com/questions/3884281/what-does-the-function-then-mean-in-javascript>  
-  - Example:
+  - In the following example we fetch and render some raw data from the Github users API <https://api.github.com/users>. However, the rendered data is displayed in a very raw format:
     - `index.js`
       ```
       import React from "react";
@@ -354,4 +356,61 @@
       export default App;
       ```
 - Displaying data from an API
-- 
+  - In this example, we select specific JSON data elements to display and render that selected data with more readable HTML formatting:
+  - Update `app.js` snippet:
+    ```
+    if (data) {
+        return (
+          <div>
+            <h1>{data.name}</h1>
+            <p>{data.location}</p>
+            <img src={data.avatar_url} alt={data.login}/>
+          </div>
+        );
+      }
+    ```
+    - In the JSON tree, `data` is the root element, and then there are numerous child elements, so we refer to them using parent-child dot notation, e.g., `data.name`.
+- Handling Loading States
+  - When we make an HTTP request to an API, there are three possible States:
+    - Pending AKA Loading
+    - Success
+    - Failed
+  - In the following code snippet, we handle each of the possible component states:
+    - We use the `useState` hook to create state variables for loading and errors (failure)
+    - We reference the loading and error states in the `useEffect` function.
+    ```
+    function App({login}) {
+      const [data, setData] = useState(null);
+      const [loading, setLoading] = useState(false);
+      const [error, setError] = useState(null);
+
+      useEffect ( () => {
+        if (!login) return;
+        setLoading(true);
+        fetch(`https://api.github.com/users/${login}`)
+        .then((response) => response.json())
+        .then(setData)
+        .then(() => setLoading(false))
+        .catch(setError); //a state updater with no values returns the current state
+      }, []);
+
+      if (loading) {
+        return <h1>Loading...</h1>
+      };
+
+      if (error) {
+        return <pre>{JSON.stringify(error, null, 2)}</pre>
+      };
+
+      if (!data) return null;
+
+      return (
+          <div>
+            <h1>{data.name}</h1>
+            <p>{data.location}</p>
+            <img src={data.avatar_url} alt={data.login}/>
+          </div>
+        );
+
+    }
+    ```
