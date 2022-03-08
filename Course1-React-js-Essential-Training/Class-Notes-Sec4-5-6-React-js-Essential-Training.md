@@ -301,3 +301,57 @@
     - `checked => !checked` is the first argument of the `UseReducer` hook - i.e., the ___reducer___ function. And using array deconstruction, the reducer function has been named `toggle`, which is referenced in the `<input>` tag's `onChange={toggle}` property.
     - `false` is the second argument -- i.e., the initial state
     - __Remember:__ the useReducer Hook returns an array with the ___first___ element being the current state and the ___second___ element being the reducer function AKA dispatch method.
+
+### Section 5: Asynchronous React
+- Fetching Data with Hooks
+  - In the following example we use the JavaScript `fetch` web API
+    - A Web API is an application programming interface for the Web.
+    - The `fetch` API interface allows web browser to make HTTP requests to web servers. <https://www.w3schools.com/js/js_api_fetch.asp>
+    - We can then attach the `then` function to the returned results and cleanup the output. <https://stackoverflow.com/questions/3884281/what-does-the-function-then-mean-in-javascript>  
+  - Example:
+    - `index.js`
+      ```
+      import React from "react";
+      import ReactDOM from "react-dom";
+      import "./index.css";
+      import App from "./App";
+
+      ReactDOM.render(
+        <App login = "tjamcas" />, document.getElementById("root")
+      );
+      ```
+    - `app.js`
+      ```
+      import React, { useState, useEffect } from "react";
+      import './App.css';
+
+      // https://api.github.com/users/tjamcas
+
+      function App({login}) {
+        const [data, setData] = useState(null);
+
+        useEffect ( () => {
+          fetch(`https://api.github.com/users/${login}`)
+          .then((response) => response.json())
+          .then(setData);
+        }, []);
+
+        if (data) {
+          return (
+            <div>
+              {JSON.stringify(data)}
+            </div>
+          );
+        }
+
+        return (
+          <div>
+            No user available
+          </div>
+        );
+      }
+
+      export default App;
+      ```
+- Displaying data from an API
+- 
