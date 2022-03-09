@@ -78,20 +78,20 @@
             - ___Warning___: Since JSX is closer to JavaScript than to HTML, React DOM uses camelCase property naming convention instead of HTML attribute names.
                 - For example, `class` becomes `className` in JSX, and `tabindex` becomes `tabIndex`.
     - For example:
-    ```
-    import React from "react";
-    import ReactDOM from "react-dom";
-    import "./index.css";
+        ```
+        import React from "react";
+        import ReactDOM from "react-dom";
+        import "./index.css";
 
-    ReactDOM.render(
-      <ul>
-        <li>Monday</li>
-        <li>Tuesday</li>
-        <li>Wednesday</li>
-      </ul>,
-      document.getElementById("root")
-    );
-    ```    
+        ReactDOM.render(
+          <ul>
+            <li>Monday</li>
+            <li>Tuesday</li>
+            <li>Wednesday</li>
+          </ul>,
+          document.getElementById("root")
+        );
+        ```    
     - JSX is the code between and including the `<ul>` and `</ul>` start and end tags.
     - When you use `create-react-app`, the Babel compiler is used to correctly interpret JSX code that it finds embedded in the JavaScript code.
     - For more information on the Babel JavaScript compiler, go to: <https://babeljs.io/>
