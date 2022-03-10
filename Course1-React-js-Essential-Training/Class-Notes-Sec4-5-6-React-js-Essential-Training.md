@@ -443,6 +443,6 @@
         expect(timesTwo(4)).toBe(8);
       });
       ```
-      - `expect()` and `tobe()` are functions from the Jest library
+      - `expect()` and `toBe()` are functions from the Jest library
       - `timesTwo()` is a function that resides in the `functions.js` file
       - ___Test Driven Development (TDD)___ methodology writes the tests first, and secondly, uses the feedback from the test result feedback to develop and modify the source code.
