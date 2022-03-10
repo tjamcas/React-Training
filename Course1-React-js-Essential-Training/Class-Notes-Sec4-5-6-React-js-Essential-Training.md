@@ -414,3 +414,35 @@
 
     }
     ```
+
+### Section 6 React testing
+- Using Create React App as a Testing Platform
+  - When Create React App was installed, Jest, which is a test runner was also installed.
+  - Test files should end with `.test.js` -- for example, `app.test.js`
+  - In the "Terminal" app, if you execute the command `npm test`, all files designated `.test.js` will be run
+  - File Structure:
+    - Functions will be written in the file `functions.js`
+    - Test will be written in the file `functions.test.js`
+  - More information on React testing can be found at <https://create-react-app.dev/docs/running-tests>
+  - More informtion on Jest and its syntax can be found at <https://jestjs.io/docs/using-matchers>
+- Testing Small Files with Jest
+  - Basic Jest testing syntax:
+    - `test('name of the test', () => { /* Jest syntax here */});`
+  - Example
+    - `functions.js`:
+      ```
+      export function timesTwo(a) {
+        return a * b;
+      }
+      ```
+    - `functions.test.js`:
+      ```
+      import { timesTwo } from "./functions";
+
+      test("Multiplies by two", () => {
+        expect(timesTwo(4)).toBe(8);
+      });
+      ```
+      - `expect()` and `tobe()` are functions from the Jest library
+      - `timesTwo()` is a function that resides in the `functions.js` file
+      - ___Test Driven Development (TDD)___ methodology writes the tests first, and secondly, uses the feedback from the test result feedback to develop and modify the source code.
