@@ -482,6 +482,7 @@
       - By importing `render`, we can perform assertion tests to determine whether specific web content is displayed on a webpage.  The `render` component from the React Testing Library allows you to assert whether specific words, phrases, or html tags were rendered.
       - `const { getByText } = render(<App />);` is Testing Library syntax
       - `const h1 = getByText(/Hello React Testing Library/);` is a Testing Library query
+        - We could have named the variable `h1` something else - like `h1Returned Element` or `header` or `dog`. However, it is clear and concise to use `h1` because we are looking for an `<h1>` element in the rendered `<app>` component.
       - The other code is Jest syntax
 - Testing Hooks with React Testing Library
   - We can test hooks like `useReducer` with Jest and the React Testing Library
@@ -523,4 +524,4 @@
           expect(checkbox.checked).toEqual(true);
       });
       ```
-      
+      - The `fireEvent.click` method will simulate an end user clicking a checkbox on a webpage form. From there, you can write assertion tests.   
