@@ -378,42 +378,42 @@
   - In the following code snippet, we handle each of the possible component states:
     - We use the `useState` hook to create state variables for loading and errors (failure)
     - We reference the loading and error states in the `useEffect` function.
-    ```
-    function App({login}) {
-      const [data, setData] = useState(null);
-      const [loading, setLoading] = useState(false);
-      const [error, setError] = useState(null);
+      ```
+      function App({login}) {
+        const [data, setData] = useState(null);
+        const [loading, setLoading] = useState(false);
+        const [error, setError] = useState(null);
 
-      useEffect ( () => {
-        if (!login) return;
-        setLoading(true);
-        fetch(`https://api.github.com/users/${login}`)
-        .then((response) => response.json())
-        .then(setData)
-        .then(() => setLoading(false))
-        .catch(setError); //a state updater with no values returns the current state
-      }, []);
+        useEffect ( () => {
+          if (!login) return;
+          setLoading(true);
+          fetch(`https://api.github.com/users/${login}`)
+          .then((response) => response.json())
+          .then(setData)
+          .then(() => setLoading(false))
+          .catch(setError); //a state updater with no values returns the current state
+        }, []);
 
-      if (loading) {
-        return <h1>Loading...</h1>
-      };
+        if (loading) {
+          return <h1>Loading...</h1>
+        };
 
-      if (error) {
-        return <pre>{JSON.stringify(error, null, 2)}</pre>
-      };
+        if (error) {
+          return <pre>{JSON.stringify(error, null, 2)}</pre>
+        };
 
-      if (!data) return null;
+        if (!data) return null;
 
-      return (
-          <div>
-            <h1>{data.name}</h1>
-            <p>{data.location}</p>
-            <img src={data.avatar_url} alt={data.login}/>
-          </div>
-        );
+        return (
+            <div>
+              <h1>{data.name}</h1>
+              <p>{data.location}</p>
+              <img src={data.avatar_url} alt={data.login}/>
+            </div>
+          );
 
-    }
-    ```
+      }
+      ```
 
 ### Section 6 React testing
 - Using Create React App as a Testing Platform
