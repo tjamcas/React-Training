@@ -479,6 +479,48 @@
           expect(h1).toHaveTextContent("Hello React Testing Library");
       });
       ```
+      - By importing `render`, we can perform assertion tests to determine whether specific web content is displayed on a webpage.  The `render` component from the React Testing Library allows you to assert whether specific words, phrases, or html tags were rendered.
       - `const { getByText } = render(<App />);` is Testing Library syntax
       - `const h1 = getByText(/Hello React Testing Library/);` is a Testing Library query
       - The other code is Jest syntax
+- Testing Hooks with React Testing Library
+  - We can test hooks like `useReducer` with Jest and the React Testing Library
+  - In the following example, we test whether a checkbox component that uses the useReducer hook to implement a toggle function is working.
+    - `Checkbox.js`:
+      ```
+      import React, { useReducer } from "react";
+      import "./App.css";
+
+      export function Checkbox() {
+        const [checked, toggle] = useReducer(
+          checked => !checked,
+          false
+        );
+        return (
+          <>
+            <label htmlFor="checkbox">{checked ? "checked" : "not checked"}</label>
+            <input
+              id="checkbox"
+              type="checkbox"
+              value={checked}
+              onChange={toggle}
+            />
+            <p>{checked ? "checked" : "not checked"}</p>
+          </>
+        );
+      }
+      ```
+    - `Checkbox.test.js`:
+      ```
+      import React from "react";
+      import { render, fireEvent } from "@testing-library/react";
+      import { Checkbox } from "./Checkbox";
+
+      test("Selecting checkbox", () => {
+          const { getByLabelText } = render(<Checkbox />);
+          const checkbox = getByLabelText(/not checked/);
+          fireEvent.click(checkbox);
+          expect(checkbox.checked).toEqual(true);
+      });
+      ```
+      
