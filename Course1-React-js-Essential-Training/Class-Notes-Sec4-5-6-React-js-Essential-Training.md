@@ -377,7 +377,7 @@
     - Failed
   - In the following code snippet, we handle each of the possible component states:
     - We use the `useState` hook to create state variables for loading and errors (failure)
-    - We reference the loading and error states in the `useEffect` function.
+    - We reference the loading and error states in the `useEffect` function.    
       ```
       function App({login}) {
         const [data, setData] = useState(null);
