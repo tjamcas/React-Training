@@ -424,7 +424,7 @@
     - Functions will be written in the file `functions.js`
     - Test will be written in the file `functions.test.js`
   - More information on React testing can be found at <https://create-react-app.dev/docs/running-tests>
-  - More informtion on Jest and its syntax can be found at <https://jestjs.io/docs/using-matchers>
+  - More information on Jest and its syntax can be found at <https://jestjs.io/docs/using-matchers>
 - Testing Small Files with Jest
   - Basic Jest testing syntax:
     - `test('name of the test', () => { /* Jest syntax here */});`
@@ -432,7 +432,7 @@
     - `functions.js`:
       ```
       export function timesTwo(a) {
-        return a * b;
+        return a * 2;
       }
       ```
     - `functions.test.js`:
@@ -446,3 +446,39 @@
       - `expect()` and `toBe()` are functions from the Jest library
       - `timesTwo()` is a function that resides in the `functions.js` file
       - ___Test Driven Development (TDD)___ methodology writes the tests first, and secondly, uses the feedback from the test result feedback to develop and modify the source code.
+- Introducing React Testing library
+  - Testing Library is a useful testing library that we can use with React or outside of React. It renders elements so that we can test the output to make sure that it matches our expectations.
+  - More information on Testing Library can be found at: <https://testing-library.com/docs/react-testing-library/intro/>
+  - Example:
+    - `App.js`:
+      ```
+      import React from "react";
+      import './App.css';
+
+      // https://api.github.com/users/tjamcas
+
+      function App() {
+
+        return (
+          <h1>Hello React Testing Library</h1>
+        );
+
+      }
+
+      export default App;
+      ```
+    - `App.test.js`:
+      ```
+      import { render } from "@testing-library/react";
+      import React from "react";
+      import App from "./App";
+
+      test("renders an h1", () => {
+          const { getByText } = render(<App />);
+          const h1 = getByText(/Hello React Testing Library/);
+          expect(h1).toHaveTextContent("Hello React Testing Library");
+      });
+      ```
+      - `const { getByText } = render(<App />);` is Testing Library syntax
+      - `const h1 = getByText(/Hello React Testing Library/);` is a Testing Library query
+      - The other code is Jest syntax
