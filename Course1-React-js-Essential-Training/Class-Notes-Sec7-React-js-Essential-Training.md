@@ -167,3 +167,108 @@
       
       export default App;
       ```
+- Nesting Links with React Router 6
+  - We can use the `Outlet` component to create nested components in our Single Page App
+  - In `App.js` we wrap the routes to our nested components in a parent `<Route>`:
+    ```
+    import React from "react";
+    import './App.css';
+    import { Routes, Route } from "react-router-dom";
+    import { Home, About, Events, Contact, Error404, Services, CompanyHistory, Location } from "./pages";
+
+    function App() {
+      return (
+        <div>
+          <Routes>
+            <Route path = "/" element = {<Home />} />
+            <Route path = "/about" element = {<About />}>
+              <Route path = "services" element = {<Services />} />
+              <Route path = "history" element = {<CompanyHistory />} />
+              <Route path = "location" element = {<Location />} />
+            </Route>
+            <Route path = "/events" element = {<Events />} />
+            <Route path = "/contact" element = {<Contact />} />
+            <Route path = "*" element = {<Error404 />} />
+          </Routes>
+        </div>
+      ); 
+    }
+
+    export default App;
+    ```
+  - In `pages.js`, we create the nested link components as functions (`Services()`, `CompanyHistory()`, `Location()`), and add the `<Outlet />` component to the parent - in this case `About()`:
+    ```
+    import React from "react";
+    import { Link, useLocation, Outlet } from "react-router-dom";
+
+    export function Home(){
+        return(
+            <div>
+                <h1>[Company Website]</h1>
+                <nav>
+                    <Link to="about">About</Link>
+                    <Link to="events">Events</Link>
+                    <Link to="contact">Contact</Link>
+                </nav>
+            </div>
+        );
+    }
+
+    export function About(){
+        return(
+            <div>
+                <h1>[About]</h1>
+                <Outlet />
+            </div>
+        );
+    }
+
+    export function Services(){
+        return(
+            <div>
+                <h2>Our services</h2>
+            </div>
+        )
+    }
+
+    export function CompanyHistory(){
+        return(
+            <div>
+                <h2>Our Company History</h2>
+            </div>
+        )
+    }
+
+    export function Location(){
+        return(
+            <div>
+                <h2>Our Location</h2>
+            </div>
+        )
+    }
+
+    export function Events(){
+        return(
+            <div>
+                <h1>[Events]</h1>
+            </div>
+        );
+    }
+
+    export function Contact(){
+        return(
+            <div>
+                <h1>[Contact]</h1>
+            </div>
+        );
+    }
+
+    export function Error404(){
+        let location=useLocation();
+        return(
+            <div>
+                <h1>[Resource not found at: {location.pathname}]</h1>
+            </div>
+        );
+    }
+    ```
