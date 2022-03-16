@@ -66,7 +66,7 @@
     ```
   - Next, in `App.js`, we're going to import `home`, `about`, `events` and `contact` from our `pages.js` file in order to make the App responsible for rendering these.
     - Inside the `App` function, we create a `<Routes> ... </Routes>` component that wraps around a `<Route> ... </Route>` for each of the URL paths that we want to display as part of our UI
-    - So, when the user types in the url path `https://.../appName/about`, the `App` function will return the <About /> element, because we have defined a route, `<Route path = "/about" element = {<About />} />`
+    - So, when the user types in the url path `https://.../appName/about`, the `App` function will return the `<About />` element, because we have defined a route, `<Route path = "/about" element = {<About />} />`
       ```
       import React from "react";
       import './App.css';
