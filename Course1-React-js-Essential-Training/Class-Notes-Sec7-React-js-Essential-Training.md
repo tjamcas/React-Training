@@ -90,7 +90,7 @@
       ```
 - Incorporating the Link Component
   - By importing `Link` from `react-router-dom`, we can provide links in our single page app to allow users to navigate to different pages/views.
-  - We can also add a default link that sends an error message if users try to access a page that does not exist
+  - We can also add a default link that sends an error message if users try to access a page that does not exist, `<Route path = "*" element = {<Error404 />} />'
   - We can import the `useLocation` hook is to return our current location, and then include the returned location to make the error message more informative.
   - To add the links, and the error message with the user's attempted location, do this,
     - in `pages.js`:
