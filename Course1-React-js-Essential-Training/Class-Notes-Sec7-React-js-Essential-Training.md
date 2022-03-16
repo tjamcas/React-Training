@@ -88,3 +88,82 @@
       
       export default App;
       ```
+- Incorporating the Link Component
+  - By importing `Link` from `react-router-dom`, we can provide links in our single page app to allow users to navigate to different pages/views.
+  - We can also add a default link that sends an error message if users try to access a page that does not exist
+  - We can import the `useLocation` hook is to return our current location, and then include the returned location to make the error message more informative.
+  - To add the links, and the error message with the user's attempted location, do this,
+    - in `pages.js`:
+      ```
+      import React from "react";
+      import { Link, useLocation } from "react-router-dom";
+
+      export function Home(){
+          return(
+              <div>
+                  <h1>[Company Website]</h1>
+                  <nav>
+                      <Link to="about">About</Link>
+                      <Link to="events">Events</Link>
+                      <Link to="contact">Contact</Link>
+                  </nav>
+              </div>
+          );
+      }
+
+      export function About(){
+          return(
+              <div>
+                  <h1>[About]</h1>
+              </div>
+          );
+      }
+
+      export function Events(){
+          return(
+              <div>
+                  <h1>[Events]</h1>
+              </div>
+          );
+      }
+
+      export function Contact(){
+          return(
+              <div>
+                  <h1>[Contact]</h1>
+              </div>
+          );
+      }
+
+      export function Error404(){
+          let location=useLocation();
+          return(
+              <div>
+                  <h1>[Resource not found at: {location.pathname}]</h1>
+              </div>
+          );
+      }
+      ```
+    - In the `App.js` file, we add the error path to our route config:
+      ```
+      import React from "react";
+      import './App.css';
+      import { Routes, Route } from "react-router-dom";
+      import { Home, About, Events, Contact, Error404 } from "./pages";
+
+      function App() {
+        return (
+          <div>
+            <Routes>
+              <Route path = "/" element = {<Home />} />
+              <Route path = "/about" element = {<About />} />
+              <Route path = "/events" element = {<Events />} />
+              <Route path = "/contact" element = {<Contact />} />
+              <Route path = "*" element = {<Error404 />} />
+            </Routes>
+          </div>
+        ); 
+      }
+      
+      export default App;
+      ```
