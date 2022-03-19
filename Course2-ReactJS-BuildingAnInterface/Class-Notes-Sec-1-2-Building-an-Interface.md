@@ -14,7 +14,7 @@
     - where `LIBNAME` is usually a two letter abbreviation, for example, `BS` for Bootstrap
     - In your JS file, create an element: `<ICONNAME />`, where `ICONNAME` will be the name of your icon
   - you can search for an icon at <https://react-icons.github.io/react-icons>
-  - Here is an example where we inserted an icon from the Bootstrap Icon library into the header:
+  - Here is an example where we inserted an icon from the Bootstrap Icon library into the header by editing `App.js`:
     ```
     import './App.css';
     import { BiArchive } from "react-icons/bi";
@@ -35,13 +35,19 @@
     - In Terminal:
       - `npm install -D tailwindcss postcss autoprefixer`
       - `npx tailwindcss init -p`
-      - ??? `npm install @tailwindcss/forms` ???
+      - --> `npm install @tailwindcss/forms` <-- Not in Tailwind instruct but is in included in class setup instruction. __MUST DO!__
     - Add the paths to all of your template files in your `tailwind.config.js` file:
       ```
       module.exports = {
       content: [
         "./src/**/*.{js,jsx,ts,tsx}",
       ],
+      ```
+    - ???? Tailwind will install all of the styles, even if we don't use them. Thankfully, we can use a plugin called purgeCSS to get rid of what we don't need. We'll need to make one change to the generated `tailwind.config.js` config file, so that it takes care of this. Modify/Add the following lines in the config file:
+      ```
+      purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+      ...
+      plugins: [ require('@tailwindcss/forms')]
       ```
     - Add Tailwind CSS Forms library `.../reactinterface/tailwind.config.js`:
       ```
@@ -51,6 +57,19 @@
           extend: {},
         },
         plugins: [require('@tailwindscss/forms')],
+      }
+      ```
+    - Final form of `.../reactinterface/tailwind.config.js`:
+      ```
+      module.exports = {
+        purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+        content: [
+          "./src/**/*.{js,jsx,ts,tsx}",
+        ],
+        theme: {
+          extend: {},
+        },
+        plugins: [require('@tailwindcss/forms')]
       }
       ```
     - Add the `@tailwind` directives for each of Tailwind’s layers to your `./src/index.css` file. Replace everyting in the file with the following:
