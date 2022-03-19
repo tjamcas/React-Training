@@ -33,8 +33,9 @@
   - Installation instructions can be found at: <https://tailwindcss.com/docs/guides/create-react-app>
   - To install Tailwind CSS:
     - In Terminal:
+      - `npm install -D tailwindcss postcss autoprefixer`
       - `npx tailwindcss init -p`
-      - `npm install @tailwindcss/forms`
+      - ??? `npm install @tailwindcss/forms` ???
     - Add the paths to all of your template files in your `tailwind.config.js` file:
       ```
       module.exports = {
@@ -58,3 +59,4 @@
       @tailwind components;
       @tailwind utilities;
       ```
+    - Start using Tailwind in your project: `npm run start`
