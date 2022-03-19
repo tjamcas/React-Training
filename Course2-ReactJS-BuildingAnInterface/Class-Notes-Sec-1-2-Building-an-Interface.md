@@ -35,43 +35,29 @@
     - In Terminal:
       - `npm install -D tailwindcss postcss autoprefixer`
       - `npx tailwindcss init -p`
-      - --> `npm install @tailwindcss/forms` <-- ___Not in Tailwind instructions but this is specifically called out in the course's setup instructions.___ __MUST DO!__
-    - Add the paths to all of your template files in your `tailwind.config.js` file:
-      ```
-      module.exports = {
-      content: [
-        "./src/**/*.{js,jsx,ts,tsx}",
-      ],
-      ```
-    - ???? Tailwind will install all of the styles, even if we don't use them. Thankfully, we can use a plugin called purgeCSS to get rid of what we don't need. We'll need to make one change to the generated `tailwind.config.js` config file, so that it takes care of this. Modify/Add the following lines in the config file:
-      ```
-      purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
-      ...
-      plugins: [ require('@tailwindcss/forms')]
-      ```
-    - Add Tailwind CSS Forms library `.../reactinterface/tailwind.config.js`:
-      ```
-      module.exports = {
-        content: [],
-        theme: {
-          extend: {},
-        },
-        plugins: [require('@tailwindscss/forms')],
-      }
-      ```
-    - Final form of `.../reactinterface/tailwind.config.js`:
-      ```
-      module.exports = {
-        purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+      - --> `npm install @tailwindcss/forms` <-- ___Not in Tailwind instruction guide (the link above) but this is specifically called out in the course's setup instructions.___ __MUST DO!__
+    - Modify the `.../reactinterface/tailwind.config.js` file
+      - Add the paths to all of your template files in your `tailwind.config.js` file:
+        ```
+        module.exports = {
         content: [
           "./src/**/*.{js,jsx,ts,tsx}",
         ],
-        theme: {
-          extend: {},
-        },
-        plugins: [require('@tailwindcss/forms')]
-      }
-      ```
+        ```
+      - Tailwind will install all of the styles, even if we don't use them. Thankfully, we can use a plugin called purgeCSS to get rid of what we don't need. We'll change the generated `tailwind.config.js` config file, so that it takes care of this. Modify the `purge` setting in the config file to this: `purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],`
+      - Modify the `plugins` setting to this: `plugins: [ require('@tailwindcss/forms')]`
+      - Add the Tailwind CSS Forms library to the `plugins` setting: `plugins: [require('@tailwindscss/forms')],`
+      - Final form of `.../reactinterface/tailwind.config.js`:
+        ```
+        module.exports = {
+          purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
+          content: ["./src/**/*.{js,jsx,ts,tsx}",],
+          theme: {
+            extend: {},
+          },
+          plugins: [require('@tailwindcss/forms')]
+        }
+        ```
     - Add the `@tailwind` directives for each of Tailwind’s layers to your `./src/index.css` file. Replace everyting in the file with the following:
       ```
       @tailwind base;
