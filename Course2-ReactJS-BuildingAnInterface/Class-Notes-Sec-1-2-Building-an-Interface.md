@@ -69,9 +69,9 @@
 ### Section 2: Getting Started
 - Your First Component
   - We will place all our components in a newly created folder. `./src/components`
-  - Example: creating a ___Search___ and a ___DropDown___ component
+  - Example: creating a ___Search___ component with its child ___DropDown___ component
     - Create new file named `Search.js` in the `components` folder
-      - The File includes a newly created `Search` function, that, for ease and convenience of passing parameters in the empty `(...)` parentheses, we use the _arrow_` form of defining a function:
+      - The File includes newly created `Search` and `DropDown` functions, that, for ease and convenience of passing parameters in the empty `(...)` parentheses, we use the _arrow_` form of defining a function:
         ```
         const Search = () => {
             return(
@@ -79,9 +79,34 @@
             )
         }
         ```
-      - We need to import icons. Here is the copied JSX code plus the necessary import and export statements, `Search.js`:
+      - We need to import icons for the new parent and child components, `Search` and `DropDown`. Here is the copied JSX code for the new `Search` and `DropDown` components plus the necessary import and export statements, `Search.js`:
         ```
-        import { BiCaretDown, BiSearch} from "react-icons/bi"
+        import { BiCaretDown, BiSearch, BiCheck } from "react-icons/bi"
+
+        const DropDown = () => {
+            return(
+                <div className="origin-top-right absolute right-0 mt-2 w-56
+                rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <div
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                            role="menuitem">Pet Name <BiCheck /></div>
+                        <div
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                            role="menuitem">Owner Name  <BiCheck /></div>
+                        <div
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                            role="menuitem">Date <BiCheck /></div>
+                        <div
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer border-gray-1 border-t-2"
+                            role="menuitem">Asc <BiCheck /></div>
+                        <div
+                            className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                            role="menuitem">Desc <BiCheck /></div>
+                    </div>
+              </div>        
+            )
+        }
 
         const Search = () => {
             return(
@@ -99,18 +124,19 @@
                         className="justify-center px-4 py-2 bg-blue-400 border-2 border-blue-400 text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center" id="options-menu" aria-haspopup="true" aria-expanded="true">
                         Sort By <BiCaretDown className="ml-2" />
                       </button>
+                      <DropDown />
                     </div>
                   </div>
                 </div>
               </div>        
             )
         }
-        export default Search        
+        export default Search    
         ```
-        - Note 1: We have to import the _BoxIcons_ that we use in the `Search function
+        - Note 1: We have to import the _BoxIcons_ that we use in the `Search` function
         - Note 2: We have to export `Search` as the default function/component from this file, so that it can be called in the `App.js` file
         - Note 3: The `DropDown` component is a child component to the `Search`. Therefore, we included the `DropDown` function/component in the `Search.js` file.
-          - The `DropDown` function creates dropdown menu of checkble options which we can choose to organize our search results.
+          - The `DropDown` function creates dropdown menu of checkable options which we can choose to organize our search results.
     - Modify the  `app.js` file in the `src` folder to reference the `Search.js` file containing the `Search` component/function
       ```
       import { BiArchive } from "react-icons/bi";
