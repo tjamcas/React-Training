@@ -35,7 +35,7 @@
     - In Terminal:
       - `npm install -D tailwindcss postcss autoprefixer`
       - `npx tailwindcss init -p`
-      - --> `npm install @tailwindcss/forms` <-- Not in Tailwind instruct but is in included in class setup instruction. __MUST DO!__
+      - --> `npm install @tailwindcss/forms` <-- ___Not in Tailwind instructions but this is specifically called out in the course's setup instructions.___ __MUST DO!__
     - Add the paths to all of your template files in your `tailwind.config.js` file:
       ```
       module.exports = {
