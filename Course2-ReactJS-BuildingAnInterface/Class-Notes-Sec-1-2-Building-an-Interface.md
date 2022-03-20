@@ -71,7 +71,7 @@
   - We will place all our components in a newly created folder. `./src/components`
   - Example: creating a ___Search___ component with its child ___DropDown___ component
     - Create new file named `Search.js` in the `components` folder
-      - The File includes newly created `Search` and `DropDown` functions, that, for ease and convenience of passing parameters in the empty `(...)` parentheses, we use the _arrow_` form of defining a function:
+      - The File includes newly created `Search` and `DropDown` functions, in which we use, for ease and convenience of passing parameters in the empty `(...)` parentheses, the _arrow_ `() => { ... }` form of defining a function:
         ```
         const Search = () => {
             return(
