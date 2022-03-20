@@ -324,4 +324,4 @@
     export default App;    
     ```
     - Note: `import appointmentList from "./data.json"` imports the file `data.json` into the array variable `appointmentList`
-    - Note: we use the `.map` function to map each item from the `appointmentList` array into a JSX list item, and we use an expression that is placed inside `{...}` curly braces to refer to the appropriate JSON key-value pair in `appointmentList.
+    - Note: we use the `.map` function to map each item from the `appointmentList` array into a JSX list item, and we use an expression that is placed inside `{...}` curly braces to refer to the appropriate JSON key-value pair in `appointmentList`, e.g., `{appointment.aptNotes}`.
