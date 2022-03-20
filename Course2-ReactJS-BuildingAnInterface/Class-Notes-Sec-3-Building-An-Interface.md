@@ -107,14 +107,14 @@
     - Note 3: Breaking apart the following line:
       ```
       {appointmentList
-        .map(appointment => ( // Note 3A
+        .map(appointmentItem => ( // Note 3A
           <AppointmentInfo 
-            key={appointment.id}  // Note 3B
-            appointment={appointment} // Note 3C
+            key={appointmentItem.id}  // Note 3B
+            appointment={appointmentItem} // Note 3C
           />
         ))
       }
       ```
-      - Note 3A: `appointment` here is a variable of an iterated item from the `appointmentList` array
+      - Note 3A: `appointmentItem` here is a variable of an iterated item from the `appointmentList` array
       - Note 3B: we add a key to the list item to quash warning statements
-      - Note 3C: `appointment` is the named attribute - we could call it anything??? - and `{appointment}` passes the iterated item to the child `AppointmentInfo` component
+      - Note 3C: `appointment` is the named attribute - and will be passed to the child `AppointmentInfo` component - and `{appointmentItem}` is the actual iterate item/object passed through the `appointment` property
