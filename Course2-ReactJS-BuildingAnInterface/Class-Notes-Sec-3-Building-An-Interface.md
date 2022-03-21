@@ -150,4 +150,6 @@
             }
         ```
         - Note 5A: the JavaScript expression is inserted between the curly braces `{ ... }`
-        - Note 5B: the string literal is inserted between the back ticks ` `...` `
+        - Note 5B: the string literal is inserted between the back ticks ' `...` '
+        - Note 5C: within the string literal, we insert a JavaScript expression using `${ ... }`:
+          - `${toggleForm ? 'rounded-t-md' : 'rounded-md' }`
