@@ -103,7 +103,7 @@
     export default App;
     ```
     - Note 1: The import statements are modified to reference the correct icons as well as to import/call `AppointmentInfo`
-    - Note 2: We pass the `Appointment` object to the child `AppointmentInfo` component with the `map (appointment => ( ... ) code block
+    - Note 2: We pass the `Appointment` object to the child `AppointmentInfo` component with the `map (appointmentItem => ( ... ) code block
     - Note 3: Breaking apart the following line:
       ```
       {appointmentList
@@ -115,6 +115,7 @@
         ))
       }
       ```
-      - Note 3A: `appointmentItem` here is a variable of an iterated item from the `appointmentList` array
+      - Note 3A: `appointmentItem` here is a variable of an iterated item/object from the `appointmentList` array
       - Note 3B: we add a key to the list item to quash warning statements
-      - Note 3C: `appointment` is the named attribute - and will be passed to the child `AppointmentInfo` component - and `{appointmentItem}` is the actual iterate item/object passed through the `appointment` property
+      - Note 3C: `appointment` is the named attribute - and will be passed to the child `AppointmentInfo` component - and `{appointmentItem}` is the actual iterated item/object passed through the `appointment` property
+        - In other words, `appointment` is the passed `props` (or properties) parameter variable (which we saw in the "React Essentials" Eve Porcello training class) and it has been set to equal `appointmentitem`.
