@@ -4,9 +4,9 @@
 ### Section 3: Sort and Search
 - Passing Data to a Component
   - In this section, we re-factor our code to break out the appointment information code  from the `App.js` component and into a separate component named `AppointmentInfo.js`
-  - This will require passing information from the `App` component into the AppointmentInfo` component
+  - This will require passing information from the `App` component into the `AppointmentInfo` component
   - Recall that the `App` component receives/imports all of the scheduled appointment information through the import statement: `import appointmentList from "./data.json"`
-  - `App` then processes the appointment data with the following code block:
+  - `App` then processes the appointment data into an unordered list with the following code block:
     ```
     <ul className="divide-y divide-gray-200">
         {appointmentList
@@ -30,7 +30,7 @@
       ```
   - This code block loops through each item (i.e., appointment)in the `AppointmentList` array, and inserts it into a list item.
   - Re-factoring: We will extract the `<li>` code from `App.js` and place it in a newly created component named `AppointmentInfo`.
-    - This will simplify the `App.js~ code and make it more readable, while placing a logically contained and functional code block into its own component.
+    - This will simplify the `App.js` code and make it more readable, while placing a logically contained and functional code block into its own component.
     - However, this will require us to pass data between the parent `App` component to the child `AppointmentInfo` component
   - Creation of new `AppointmentInfo.js` component file looks like this:
     ```
@@ -87,10 +87,10 @@
 
           <ul className="divide-y divide-gray-200">
             {appointmentList
-              .map(appointment => (
+              .map(appointmentItem => (
                 <AppointmentInfo 
-                  key={appointment.id}
-                  appointment={appointment}
+                  key={appointmentItem.id}
+                  appointment={appointmentItem}
                 />
               ))
             }
@@ -103,7 +103,7 @@
     export default App;
     ```
     - Note 1: The import statements are modified to reference the correct icons as well as to import/call `AppointmentInfo`
-    - Note 2: We pass the `Appointment` object to the child `AppointmentInfoo` component with the `map (appointment => ( ... ) code block
+    - Note 2: We pass the `Appointment` object to the child `AppointmentInfo` component with the `map (appointment => ( ... ) code block
     - Note 3: Breaking apart the following line:
       ```
       {appointmentList
