@@ -156,7 +156,7 @@
           - For more information on `${ ... }`, see: <https://discuss.codecademy.com/t/what-does-this-syntax-do/432913> and <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals>
 - Passing State and Hiding Components
   - The following code toggles the display of the searchbar dropdown that provides the different sorting options for the returned appointments
-  - This requires us to pass state information from the parent `Search` component to the child `Dropdown` component - both of which re locatedin `Search.js`
+  - This requires us to pass state information from the parent `Search` component to the child `Dropdown` component - both of which are located in `Search.js`
   - This code is contained in the `Search` component in `Search.js`:
     ```
     import { BiCaretDown, BiSearch, BiCheck } from "react-icons/bi"
@@ -217,19 +217,19 @@
     }
     export default Search
     ```
-    - Note 1: We need to import the `useState function and declare and initialize the state variable in the parent `Search` component: `let [toggleSort, setToggleSort] = useState(false);`
+    - Note 1: We need to import the `useState` function and declare and initialize the state variable in the parent `Search` component: `let [toggleSort, setToggleSort] = useState(false);`
     - Note 2: We need to activate the Search dropdown button with an `onClick` event: `onClick={() => { setToggleSort(!toggleSort) }}`
     - Note 3: We need to pass the `toggleSort` state variable to the child `DropDown` component - we do this by creating a property, named `toggle`, for the `<DropDown />` tag and setting it equal to the `toggleSort` state variable: `<DropDown toggle={toggleSort} />`
     - Note 4: The `DropDown` component receives the `toggleSort` state variable through the passed `toggle` property: `const DropDown = ( {toggle} ) => { ...}`
     - Note 5 : if the `toggle` property equals `false` then we return `null` - the dropdown menu is not returned - and we exit the `DropDown` function/component. Otherwise, the rest of the `DropDown` code is processed and we return the dropdown.
-    ```
-    if (!toggle) {
-      return null;
-    }  
-    return(
-          <div className="origin-top-right absolute right-0 mt-2 w-56
-          rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-          ....
-          </div>        
-    )
-    ```
+      ```
+      if (!toggle) {
+        return null;
+      }  
+      return(
+            <div className="origin-top-right absolute right-0 mt-2 w-56
+            rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            ....
+            </div>        
+      )
+      ```
