@@ -119,3 +119,35 @@
       - Note 3B: we add a key to the list item to quash warning statements
       - Note 3C: `appointment` is the named attribute - and will be passed to the child `AppointmentInfo` component - and `{appointmentItem}` is the actual iterated item/object passed through the `appointment` property
         - In other words, `appointment` is the passed `props` (or properties) parameter variable (which we saw in the "React Essentials" Eve Porcello training class) and it has been set to equal `appointmentitem`.
+- The useState Hook and Conditional Classes
+  - In the following code we modify `AddAppointment.js` and the `AddAppointment` componentso that we can toggle the display of the form for adding an appointment.
+  - We utilize the useState hook which allows us to use the state of the component to drive its behavior - and more specifically the component/UI's appearance
+  - Recall that `useState` accepts an initial state and returns two values: 1. The current state, and 2. A function that updates the state.
+  - Modified code in `AddAppointment.js`:
+    ```
+    
+    ```
+    - Note 1: we import `useState`: `import { useState } from "react";`
+    - Note 2: we create the state variable and set function: `let [toggleForm, setToggleForm] = useState(false);`
+      - the state variable, `toggleForm` is initialized to be `false` - that is, we don't want the form to display initially unless the button is clicked
+    - Note 3: the Conditional expression to toggle the input form has this structure: { toggleForm && ... //Code for form ... }
+      - This is effectively a shorthand way to write an if statement
+      - However, there is a division in opinion as to whether this pattern is good, readable code -- see <https://stackoverflow.com/questions/12664230/is-boolean-expression-statement-the-same-as-ifboolean-expression-stat>
+      - Dissenters believe a traditional `if` statement or ternary `if` statement should be used instead
+    - Note 4: we activate the "Add Appointment" button to toggle the form by adding the following code"
+      ```
+      <button onClick={ () => {setToggleForm(!toggleForm)} }
+            ...
+          </button>
+      ```
+    - Note 5: we format the bottom corners of the button to round depending on whether the form is showing (i.e, has been toggled on or off --  true or false)
+      - We want the button to have `className = rounded-md` when false, and `className = rounded-t-md` (only top is rounded) when true (i.e, form is toggled on or showing)
+      - To do this we'll set the button's `classname` to equal a JavaScript expression
+        ```
+        className={
+              `bg-blue-400 text-white px-2 py-3 w-full text-left
+              ${toggleForm ? 'rounded-t-md' : 'rounded-md' }`
+            }
+        ```
+        - Note 5A: the JavaScript expression is inserted between the curly braces `{ ... }`
+        - Note 5B: the string literal is inserted between the back ticks ` `...` `
