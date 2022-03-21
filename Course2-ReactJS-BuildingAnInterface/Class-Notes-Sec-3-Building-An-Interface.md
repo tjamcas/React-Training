@@ -150,6 +150,7 @@
             }
         ```
         - Note 5A: the JavaScript expression is inserted between the curly braces `{ ... }`
-        - Note 5B: the string literal is inserted between the back ticks ' `...` '
-        - Note 5C: within the string literal, we insert a JavaScript expression using `${ ... }`:
+        - Note 5B: a template literal is inserted between the back ticks - \`...\`
+        - Note 5C: within the template literal, we insert a JavaScript expression using `${ ... }`:
           - `${toggleForm ? 'rounded-t-md' : 'rounded-md' }`
+          - For more information on `${ ... }`, see: <https://discuss.codecademy.com/t/what-does-this-syntax-do/432913> and <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals>
