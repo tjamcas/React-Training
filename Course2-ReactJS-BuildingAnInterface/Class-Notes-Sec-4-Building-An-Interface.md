@@ -180,7 +180,7 @@
 
     export default App;
     ```
-    - Note 1: First, we define the `onDeleteAppointment` property/function and add it in the `<AppointmentInfo /> tag. More specifically:
+    - Note 1: First, we define the `onDeleteAppointment` property/function and add it in the `<AppointmentInfo />` tag. More specifically:
       ```
       {appointmentList
         .map(appointmentItem => (
