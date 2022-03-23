@@ -89,3 +89,112 @@
       }, [fetchData]);
       ```
       - useEffect takes two parameters. The first one is a function and second one is an array (it is also optional). In short, useEffect is invoking the function based on the second parameter. An explanation of useEffect from: <https://medium.com/swlh/react-hooks-how-to-use-useeffect-4013db2cec44>
+- Deleting Records
+  - We will create the functionality to delete an appointment record by clicking on the trash icon next to a record in the appointment list. The parent `App` component is managing the data, therefore, the `AppointmentInfo` component will have to communicate to the parent `App` component using the appointment id parameter.
+  - Recall that our `data.json` fiile was an array of appointment objects, and the appointment objects had the form of:
+    ```
+    {
+      "id": "3",
+      "petName": "Nadalee",
+      "ownerName": "Krystle Valerija",
+      "aptNotes": "This dog is coming in for his monthly nail trim and grooming",
+      "aptDate": "2018-11-28 16:00"
+    }
+    ```
+  - So, we will be able to reference an appointment record with the `id` key
+  - We begin by modifying the `AppointmentInfo.js` component:
+    ```
+    import { BiTrash } from "react-icons/bi";
+
+    const AppointmentInfo = ({ appointment, onDeleteAppointment }) => {
+        return (
+            <li className="px-3 py-3 flex items-start">
+                <button onClick={ () => onDeleteAppointment(appointment.id) } type="button"
+                className="p-1.5 mr-1.5 mt-1 rounded text-white bg-red-500 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <BiTrash /></button>
+                <div className="flex-grow">
+                <div className="flex items-center">
+                    <span className="flex-none font-medium text-2xl text-blue-500">{appointment.petName}</span>
+                    <span className="flex-grow text-right">{appointment.aptDate}</span>
+                </div>
+                <div><b className="font-bold text-blue-500">Owner:</b> {appointment.ownerName}</div>
+                <div className="leading-tight">{appointment.aptNotes}</div>
+                </div>
+            </li>
+        )
+    }
+    ```
+    - Note 1: First, we will edit the `<button> tag associated with the `<BiTrash/>` icon to add an `onClick` event which will call a function named `onDeleteAppointment` (and which is defined in the parent `App` component).
+    - Note 2: Second we need to modify the `AppointmentInfo` passed properties to also include the `onDeleteAppointment` function
+  - Next, we modify the `App.js` parent component to define the `onDeleteAppointment` function:
+    ```
+    import { useState, useCallback, useEffect } from "react";
+    import { BiCalendar } from "react-icons/bi";
+    import Search from "./components/Search";
+    import AddAppointment from "./components/AddAppointment";
+    import AppointmentInfo from "./components/AppointmentInfo";
+
+    function App() {
+      let [appointmentList, setAppointmentList] = useState([]);
+
+      const fetchData = useCallback(
+        () => {
+          fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+              setAppointmentList(data)
+            })
+        }, []
+      )
+
+      useEffect(() => {
+        fetchData()
+      }, [fetchData]);
+
+      return (
+        <div className="App container mx-auto mt-3 font-thin">
+          <h1 className="text-5xl mb-3">
+            <BiCalendar className="inline-block text-red-400 align-top"/>Your Appointments</h1>
+          <AddAppointment />
+          <Search />
+
+          <ul className="divide-y divide-gray-200">
+            {appointmentList
+              .map(appointmentItem => (
+                <AppointmentInfo 
+                  key={appointmentItem.id}
+                  appointment={appointmentItem}
+                  onDeleteAppointment={
+                    (appointmentId) => 
+                      setAppointmentList(appointmentList.filter(appointment => 
+                        appointment.id !== appointmentId))
+                  }
+                />
+              ))
+            }
+
+          </ul>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 1: First, we define the `onDeleteAppointment` property/function and add it in the `<AppointmentInfo /> tag. More specifically:
+      ```
+      {appointmentList
+        .map(appointmentItem => (
+          <AppointmentInfo 
+            key={appointmentItem.id}
+            appointment={appointmentItem}
+            onDeleteAppointment={
+              (appointmentId) => 
+                setAppointmentList(appointmentList.filter(appointment => 
+                  appointment.id !== appointmentId))
+            }
+          />
+        ))
+      }
+      ```
+      - When the `onClick` event occurs, the `appointment.id` is passed along with the `onDeleteAppointment` function. Therefore, we can reference `appointment.id` in a temporary variable named `appointmentId`, and use `appointmentId` when we define the `onDeleteAppointment` function using arrow format
+      - `onDeleteAppointment` function calls the state setter function, `setAppointmentList`, and uses the `filter` method to remove any appointments whose `id` matches `appointmentId`
