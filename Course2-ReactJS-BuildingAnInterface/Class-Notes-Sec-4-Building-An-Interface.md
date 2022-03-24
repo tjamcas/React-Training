@@ -213,7 +213,7 @@
                 <BiSearch />
                 <label htmlFor="query" className="sr-only" />
               </div>
-              <input type="text" name="query" id="query" value="{query}"
+              <input type="text" name="query" id="query" value={query}
                 onChange={(event) => { onQueryChange(event.target.value) }}
                 className="pl-8 rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" placeholder="Search" />
               <div className="absolute inset-y-0 right-0 flex items-center">
@@ -237,6 +237,98 @@
       -  For more information on `onChange`, see <https://www.w3schools.com/jsref/event_onchange.asp>.
       -  For more information on events, see <https://www.w3schools.com/js/js_events.asp>.
     -  Note 2: we need to track the value of the input by assigning the `<input>`'s `value` property to a javascript variable named `query`:    
-        `<input type="text" name="query" id="query" value="{query}" ... />`
+        `<input type="text" name="query" id="query" value={query} ... />`
     - Note 3: The `Search` component now has two passed parameters : 1. the changed value inside the search box and the `onQueryChange` function (that is defined in `App.js`). Therefore we have to change the `Search` component's function declaration to include these two parameters:    
-      
+  - Here is the modified code for the `App` component inside the `App.js` file:
+    ```
+    import { useState, useCallback, useEffect } from "react";
+    import { BiCalendar } from "react-icons/bi";
+    import Search from "./components/Search";
+    import AddAppointment from "./components/AddAppointment";
+    import AppointmentInfo from "./components/AppointmentInfo";
+
+    function App() {
+      let [appointmentList, setAppointmentList] = useState([]);
+      let [queryState, setQueryState] = useState("");
+
+      const filteredAppointments = appointmentList.filter(
+        item => {
+          return(
+            item.petName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.ownerName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.aptNotes.toLowerCase().includes(queryState.toLowerCase())
+          )
+        }
+      )
+
+      const fetchData = useCallback(
+        () => {
+          fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+              setAppointmentList(data)
+            })
+        }, []
+      )
+
+      useEffect(() => {
+        fetchData()
+      }, [fetchData]);
+
+      return (
+        <div className="App container mx-auto mt-3 font-thin">
+          <h1 className="text-5xl mb-3">
+            <BiCalendar className="inline-block text-red-400 align-top"/>Your Appointments</h1>
+          <AddAppointment />
+          <Search query={queryState}
+            onQueryChange = { myQuery => setQueryState(myQuery) } />
+
+          <ul className="divide-y divide-gray-200">
+            {filteredAppointments
+              .map(appointmentItem => (
+                <AppointmentInfo 
+                  key={appointmentItem.id}
+                  appointment={appointmentItem}
+                  onDeleteAppointment={
+                    (appointmentId) => 
+                      setAppointmentList(appointmentList.filter(appointment => 
+                        appointment.id !== appointmentId))
+                  }
+                />
+              ))
+            }
+
+          </ul>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 1: We need a new state variable for the search query (which is named `query` and initialized to an empty string), which we can create with the `useState` hook:    
+      `let [queryState, setQueryState] = useState("");;`
+    - Note 2: We change the properties for the <Search/> child component. The `query` property (our first passed parameter/property) will be set to the local `queryState` variable, and `onQueryChange` will receive `myQuery` from the event and then use the setQuery method and pass along what we received:
+      ```
+      <Search query={queryState}
+        onQueryChange = { myQuery => setQueryState(myQuery) } />
+      ```
+     - Note 3: we create a copy of the original `AppointmentList` array named `filteredAppointments` because we don't want to change the original but we do want to change the copy so it only includes records that match our search (query) criteria:
+      ```
+      const filteredAppointments = appointmentList.filter(
+        item => {
+          return(
+            item.petName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.ownerName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.aptNotes.toLowerCase().includes(queryState.toLowerCase())
+          )
+        }
+      )
+      ```
+    - Note 4: Now, we want the unorder list to be base on the `filteredAppointments` array variable rather than the full `appointmentList` array variable:
+      ```
+      <ul className="divide-y divide-gray-200">
+        {filteredAppointments
+          .map(appointmentItem => 
+          ...
+            />
+      ```
