@@ -124,7 +124,7 @@
         )
     }
     ```
-    - Note 1: First, we will edit the `<button> tag associated with the `<BiTrash/>` icon to add an `onClick` event which will call a function named `onDeleteAppointment` (and which is defined in the parent `App` component).
+    - Note 1: First, we will edit the `<button>` tag associated with the `<BiTrash/>` icon to add an `onClick` event which will call a function named `onDeleteAppointment` (and which is defined in the parent `App` component).
     - Note 2: Second we need to modify the `AppointmentInfo` passed properties to also include the `onDeleteAppointment` function
   - Next, we modify the `App.js` parent component to define the `onDeleteAppointment` function:
     ```
@@ -198,3 +198,11 @@
       ```
       - When the `onClick` event occurs, the `appointment.id` is passed along with the `onDeleteAppointment` function. Therefore, we can reference `appointment.id` in a temporary variable named `appointmentId`, and use `appointmentId` when we define the `onDeleteAppointment` function using arrow format
       - `onDeleteAppointment` function calls the state setter function, `setAppointmentList`, and uses the `filter` method to remove any appointments whose `id` matches `appointmentId`
+- Searching with a filtered array
+  - In the next set of code, we will modify the application that activates the search input on the appointment list. 
+    - The `Search.js` component will need to be modified to accept the inputted search screen and send it to the `App.js` parent component. Search.js` will also need to reference the search function that resides in `App.js` .
+    - The `App.js` component will be modified to accept the search string and to attempt query whether the search criteria can be found in one or records within in the `petName`, `ownerName` or `apptNotes` fields.
+  - Here is the modified code for `Search.js`:
+    ```
+    
+    ```
