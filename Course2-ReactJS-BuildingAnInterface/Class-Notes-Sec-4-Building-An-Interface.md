@@ -200,8 +200,8 @@
       - `onDeleteAppointment` function calls the state setter function, `setAppointmentList`, and uses the `filter` method to remove any appointments whose `id` matches `appointmentId`
 - Searching with a filtered array
   - In the next set of code, we will modify the application that activates the search input on the appointment list. 
-    - The `Search.js` component will need to be modified to accept the input from the search field and send it to the `App.js` parent component. Search.js` will also need to reference the search function, `onQueryChange`, that resides in `App.js` .
-    - The `App.js` component will be modified to accept the search string and to create a function, `onQueryChange`, that queries whether the search criteria can be found in one or records within in the `petName`, `ownerName` or `apptNotes` fields. We want to leave the `AppointmentList` unchaged, and so its contents will be duplicated to a second array.
+    - The `Search.js` component will need to be modified to accept the input from the search field and send it to the `App.js` parent component. `Search.js` will also need to reference the search function, `onQueryChange`, that resides in `App.js` .
+    - The `App.js` component will be modified to accept the search string and to create a function, `onQueryChange`, that queries whether the search criteria can be found in one or more records within in the `petName`, `ownerName` or `apptNotes` fields. We want to leave the `AppointmentList` array unchanged, therefore its contents will be duplicated to a second array, `filteredAppointments`.
   - Here is the modified code for the `Search` component inside the `Search.js` file:
     ```
     const Search = ({ query, onQueryChange }) => {
@@ -305,7 +305,7 @@
 
     export default App;
     ```
-    - Note 1: We need a new state variable for the search query (which is named `query` and initialized to an empty string), which we can create with the `useState` hook:    
+    - Note 1: We need a new state variable for the search query (which is named `queryState` and initialized to an empty string), which we can create with the `useState` hook:    
       `let [queryState, setQueryState] = useState("");;`
     - Note 2: We change the properties for the <Search/> child component. The `query` property (our first passed parameter/property) will be set to the local `queryState` variable, and `onQueryChange` will receive `myQuery` from the event and then use the setQuery method and pass along what we received:
       ```
@@ -332,3 +332,4 @@
           ...
             />
       ```
+- Setting Up a Sort
