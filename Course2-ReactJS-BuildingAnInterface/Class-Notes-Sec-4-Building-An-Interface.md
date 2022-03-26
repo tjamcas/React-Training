@@ -333,7 +333,9 @@
             />
       ```
 - Setting Up a Sort
-  - The next piece of functionality 1. sorts the filtered appointment list by one of the field names: pet name, owner name, or appointment date, and 2. whether we will sort in ascending or descending order. This will require a state variable, sortBy, that tracks which field we will sort by. This will also require a second variable, order by, that tracks whether we are sorting in ascending or descending order. In this section, we will partially prepare the sort so that we can manually choose one of the fields (i.e., hardcoding the field rather than selecting the field in the user interface), and manually set the sort order. In the following section, we will program the user interface.
+  - The next piece of functionality 1. sorts the filtered appointment list by one of the field names: pet name, owner name, or appointment date, and 2. whether we will sort in ascending or descending order. 
+  - This will require a state variable, `sortBy`, that tracks which field we will sort by. This will also require a second variable, `orderBy`, that tracks whether we are sorting in ascending or descending order. 
+  - In this section, we will partially prepare the sort so that we can manually choose one of the fields (i.e., hardcoding the field rather than selecting the field in the user interface), and manually set the sort order. In the following section, we will program the user interface.
   - We will use the `sort()` method that is built into the JavaScript Array object type. For complete documentation, go to <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort>
     - The syntax for an arrow function is: `sort((a, b) => { /* ... */ } )`
       - If you want to sort b before a, i.e., descending order, then the comparson code (between the curly braces) should return a positive value.
