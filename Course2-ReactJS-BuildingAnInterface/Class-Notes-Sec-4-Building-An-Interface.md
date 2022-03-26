@@ -438,3 +438,6 @@
       )
       ```
 - Programming the Sorting Interface
+  - In this section, we code the user interface so that the user can select which field they want to sort by and select whether the sort will be in ascending or descending order. In the previous section we prepared the sort. Now, we need to code the "Sort By" dropdown in our app to have an on-click event that instructs the app to sort the appointment list as the user requested.
+  - We will need to modify the `AppointmentInfo.js` component to create the on-click events and store the user's sorting selections for which field to sort by and in which order (ascending or descending). These selections are stored in variables. This component will need to send the parent `App.js` component the variables with the user's selections.
+  - We will modify the `App.js` component to receive the user's sorting selections as passed properties/parameters, and use that state information in the sorting code.
