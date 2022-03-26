@@ -333,3 +333,105 @@
             />
       ```
 - Setting Up a Sort
+  - The next piece of functionality 1. sorts the filtered appointment list by one of the field names: pet name, owner name, or appointment date, and 2. whether we will sort in ascending or descending order. This will require a state variable, sortBy, that tracks which field we will sort by. This will also require a second variable, order by, that tracks whether we are sorting in ascending or descending order. In this section, we will partially prepare the sort so that we can manually choose one of the fields (i.e., hardcoding the field rather than selecting the field in the user interface), and manually set the sort order. In the following section, we will program the user interface.
+  - We will use the `sort()` method that is built into the JavaScript Array object type. For complete documentation, go to <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort>
+    - The syntax for an arrow function is: `sort((a, b) => { /* ... */ } )`
+      - If you want to sort b before a, i.e., descending order, then the comparson code (between the curly braces) should return a positive value.
+      - If you want to sort a before b, i.e., ascending order, then the comparison code should return a negative value.
+  - Here is the modified code to set up the sort in the `App.js` component:
+    ```
+    import { useState, useCallback, useEffect } from "react";
+    import { BiCalendar } from "react-icons/bi";
+    import Search from "./components/Search";
+    import AddAppointment from "./components/AddAppointment";
+    import AppointmentInfo from "./components/AppointmentInfo";
+
+    function App() {
+      let [appointmentList, setAppointmentList] = useState([]);
+      let [queryState, setQueryState] = useState("");
+      let [sortBy, setSetBy] = useState("petName");
+      let [orderBy, setOrderBy] = useState("asc");
+
+      const filteredAppointments = appointmentList.filter(
+        item => {
+          return(
+            item.petName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.ownerName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.aptNotes.toLowerCase().includes(queryState.toLowerCase())
+          )
+        }).sort((a, b) => {
+          let order = ((orderBy === "asc") ? 1 : -1) ;
+          return (
+            ( a[sortBy].toLowerCase() < b[sortBy].toLowerCase() ) ?
+              -1 * order : 1 * order
+          )
+        }
+      )
+
+      const fetchData = useCallback(
+        () => {
+          fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+              setAppointmentList(data)
+            })
+        }, []
+      )
+
+      useEffect(() => {
+        fetchData()
+      }, [fetchData]);
+
+      return (
+        <div className="App container mx-auto mt-3 font-thin">
+          <h1 className="text-5xl mb-3">
+            <BiCalendar className="inline-block text-red-400 align-top"/>Your Appointments</h1>
+          <AddAppointment />
+          <Search query={queryState}
+            onQueryChange = { myQuery => setQueryState(myQuery) } />
+
+          <ul className="divide-y divide-gray-200">
+            {filteredAppointments
+              .map(appointmentItem => (
+                <AppointmentInfo 
+                  key={appointmentItem.id}
+                  appointment={appointmentItem}
+                  onDeleteAppointment={
+                    (appointmentId) => 
+                      setAppointmentList(appointmentList.filter(appointment => 
+                        appointment.id !== appointmentId))
+                  }
+                />
+              ))
+            }
+
+          </ul>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 1: We need to set up state variables for `sortBy`, which will be initialized to `petName`, and `orderBy`, which will be initialized to `asc` (meaning ascending).
+      ```
+      let [sortBy, setSetBy] = useState("petName");
+      let [orderBy, setOrderBy] = useState("asc");
+      ```
+    - Note 2: we can chain our sorting code onto the code we previously wrote where we assigned the variable `filteredAppointments` to be the `appointmentList` filtered on a search string.
+      ```
+      const filteredAppointments = appointmentList.filter(
+        item => {
+          return(
+            item.petName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.ownerName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.aptNotes.toLowerCase().includes(queryState.toLowerCase())
+          )
+        }).sort((a, b) => {
+          let order = ((orderBy === "asc") ? 1 : -1) ;
+          return (
+            ( a[sortBy].toLowerCase() < b[sortBy].toLowerCase() ) ?
+              -1 * order : 1 * order
+          )
+        }
+      )
+      ```
