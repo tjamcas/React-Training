@@ -439,5 +439,189 @@
       ```
 - Programming the Sorting Interface
   - In this section, we code the user interface so that the user can select which field they want to sort by and select whether the sort will be in ascending or descending order. In the previous section we prepared the sort. Now, we need to code the "Sort By" dropdown in our app to have an on-click event that instructs the app to sort the appointment list as the user requested.
-  - We will need to modify the `AppointmentInfo.js` component to create the on-click events and store the user's sorting selections for which field to sort by and in which order (ascending or descending). These selections are stored in variables. This component will need to send the parent `App.js` component the variables with the user's selections.
-  - We will modify the `App.js` component to receive the user's sorting selections as passed properties/parameters, and use that state information in the sorting code.
+    - We will need to modify the `Search.js` component to create the on-click events and store the user's sorting selections for which field to sort by and in which order (ascending or descending). These selections are stored in variables. This component will need to send the parent `App.js` component the variables with the user's selections.
+    - We will modify the `App.js` component to receive the user's sorting selections as passed properties/parameters, and use that state information in the sorting code.
+  - Here is the modified `App.js` component code:
+    ```
+    import { useState, useCallback, useEffect } from "react";
+    import { BiCalendar } from "react-icons/bi";
+    import Search from "./components/Search";
+    import AddAppointment from "./components/AddAppointment";
+    import AppointmentInfo from "./components/AppointmentInfo";
+
+    function App() {
+      let [appointmentList, setAppointmentList] = useState([]);
+      let [queryState, setQueryState] = useState("");
+      let [sortBy, setSortBy] = useState("petName");
+      let [orderBy, setOrderBy] = useState("asc");
+
+      const filteredAppointments = appointmentList.filter(
+        item => {
+          return(
+            item.petName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.ownerName.toLowerCase().includes(queryState.toLowerCase()) ||
+            item.aptNotes.toLowerCase().includes(queryState.toLowerCase())
+          )
+        }).sort((a, b) => {
+          let order = ((orderBy === "asc") ? 1 : -1) ;
+          return (
+            ( a[sortBy].toLowerCase() < b[sortBy].toLowerCase() ) ?
+              -1 * order : 1 * order
+          )
+        }
+      )
+
+      const fetchData = useCallback(
+        () => {
+          fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+              setAppointmentList(data)
+            })
+        }, []
+      )
+
+      useEffect(() => {
+        fetchData()
+      }, [fetchData]);
+
+      return (
+        <div className="App container mx-auto mt-3 font-thin">
+          <h1 className="text-5xl mb-3">
+            <BiCalendar className="inline-block text-red-400 align-top"/>Your Appointments</h1>
+          <AddAppointment />
+          <Search query={queryState}
+            onQueryChange = { myQuery => setQueryState(myQuery) }
+            orderBy = {orderBy}
+            onOrderByChange = { mySort => setOrderBy(mySort)}
+            sortBy = {sortBy}
+            onSortByChange = { mySort => setSortBy(mySort) }
+          />
+
+          <ul className="divide-y divide-gray-200">
+            {filteredAppointments
+              .map(appointmentItem => (
+                <AppointmentInfo 
+                  key={appointmentItem.id}
+                  appointment={appointmentItem}
+                  onDeleteAppointment={
+                    (appointmentId) => 
+                      setAppointmentList(appointmentList.filter(appointment => 
+                        appointment.id !== appointmentId))
+                  }
+                />
+              ))
+            }
+
+          </ul>
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 1: We pass into the `App.js` component information from the child `Search.js` sub-component information about the `sortBy` and `orderBy` state variables. This gets tucked into the `<Search .... />` tag:
+      ```
+      <Search query={queryState}
+        onQueryChange = { myQuery => setQueryState(myQuery) }
+        orderBy = {orderBy}
+        onOrderByChange = { mySort => setOrderBy(mySort)}
+        sortBy = {sortBy}
+        onSortByChange = { mySort => setSortBy(mySort) }
+      />
+      ```
+  - We need to modify the `Search.js` component to have the passed properties/parameters for the `onOrderByChange` and `onSortByChange` functions as well as the `orderBy` and `sortBy` state variables in the `<DropDown ... />` tag. Here is the modified `Search.js` sub-component:
+    ```
+    import { BiCaretDown, BiSearch, BiCheck } from "react-icons/bi"
+    import { useState } from "react";
+
+    const DropDown = ( {toggle, sortBy, onSortByChange, orderBy, onOrderByChange} ) => {
+      if (!toggle) {
+        return null;
+      }  
+      return(
+            <div className="origin-top-right absolute right-0 mt-2 w-56
+            rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                    <div onClick={() => onSortByChange('petName')}
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                        role="menuitem">Pet Name {(sortBy === 'petName') && <BiCheck />}</div>
+                    <div onClick={() => onSortByChange('ownerName')}
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                        role="menuitem">Owner Name  {(sortBy === 'ownerName') && <BiCheck />}</div>
+                    <div onClick={() => onSortByChange('aptDate')}
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                        role="menuitem">Date {(sortBy === 'aptDate') && <BiCheck />}</div>
+                    <div onClick={() => onOrderByChange('asc')}
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer border-gray-1 border-t-2"
+                        role="menuitem">Asc {(orderBy === 'asc') && <BiCheck />}</div>
+                    <div onClick={() => onOrderByChange('desc')}
+                        className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+                        role="menuitem">Desc {(orderBy === 'desc') && <BiCheck />}</div>
+                </div>
+          </div>        
+        )
+    }
+
+    const Search = ({ query, onQueryChange, sortBy, onSortByChange, orderBy, onOrderByChange }) => {
+      let [toggleSort, setToggleSort] = useState(false);  
+      return(
+            <div className="py-5">
+            <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <BiSearch />
+                <label htmlFor="query" className="sr-only" />
+              </div>
+              <input type="text" name="query" id="query" value={query}
+                onChange={(event) => { onQueryChange(event.target.value) }}
+                className="pl-8 rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300" placeholder="Search" />
+              <div className="absolute inset-y-0 right-0 flex items-center">
+                <div>
+                  <button type="button"
+                    onClick={() => { setToggleSort(!toggleSort) }}
+                    className="justify-center px-4 py-2 bg-blue-400 border-2 border-blue-400 text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center" id="options-menu" aria-haspopup="true" aria-expanded="true">
+                    Sort By <BiCaretDown className="ml-2" />
+                  </button>
+                  <DropDown toggle={toggleSort} 
+                    sortBy ={sortBy}
+                    onSortByChange = {(mySort) => onSortByChange(mySort)}
+                    orderBy = {orderBy}
+                    onOrderByChange = {(myOrder) => onOrderByChange(myOrder)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>        
+        )
+    }
+    export default Search
+    ```
+    - Note 1: The `Search` component declaration must be modified with the new passed properties/parameters:    
+      `const Search = ({ query, onQueryChange, sortBy, onSortByChange, orderBy, onOrderByChange }) => { ... }`
+    - Note 2: We can now reference these parameters in the `<DropDown ... />` tag:    
+      ```
+      sortBy ={sortBy}
+        onSortByChange = {(mySort) => onSortByChange(mySort)}
+        orderBy = {orderBy}
+        onOrderByChange = {(myOrder) => onOrderByChange(myOrder)}
+      />
+      ```
+    - Note 3: These parameters need to be passed into the declaration statement of `Search.js` child component `DropDown`:    
+      `const DropDown = ( {toggle, sortBy, onSortByChange, orderBy, onOrderByChange} ) => { ... }`
+    - Note 4: Next, we need to create on-click events for each of the drop down selections (partially showing two of the five selections below):
+      ```
+          <div onClick={() => onSortByChange('petName')}
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+              role="menuitem">Pet Name <BiCheck /></div>
+          ...
+          <div onClick={() => onOrderByChange('asc')}
+              className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer border-gray-1 border-t-2"
+              role="menuitem">Asc <BiCheck /></div>
+          ...
+      ```
+    - Note 5: Finally, we need to display the check mark if somebody has chosen the sorting/ordering option item. For example:
+      ```
+      <div onClick={() => onSortByChange('petName')}
+          className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
+          role="menuitem">Pet Name {(sortBy === 'petName') && <BiCheck />}</div>
+      ```
