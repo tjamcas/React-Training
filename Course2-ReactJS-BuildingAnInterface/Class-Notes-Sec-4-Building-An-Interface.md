@@ -625,3 +625,14 @@
           className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
           role="menuitem">Pet Name {(sortBy === 'petName') && <BiCheck />}</div>
       ```
+- Adding a New Appointment
+  - In this final section we want to add a new appointment to the appointment list through the single page app's user interface.
+  - This will require editing the parent `App.js` and child `AddAppointment.js` components.
+    - The two components will pass/communicate between them the parameters: `onSendAppointment` and `lastId`.
+  - Among other changes, the `AddAppointment.js` component will have a new function named `formDataPublish` that:
+    - 1. creates a local object variable, named `appointmentInfo`, where we can store the UI's appointment form data for pet name, ownername, etc.,
+    - 2. add the next appointment id number (using the `lastId` parameter which is managed by the `App.js` component),
+    - 3. send the appointment info to the `App.js` component (using the `onSendAppointment` function/property/parameter),
+    - 4. clear the entry form data (now that we have committed/submitted our appointment entry),
+    - 5. and toggle the add appointment drop down
+  - The `App.js` component will define the `onSendAppointment` property/function which adds the newly entered/submitted appointment to the `App` component's variable `AppointmentList` state variable (which you recall is an array of all the appointments).
