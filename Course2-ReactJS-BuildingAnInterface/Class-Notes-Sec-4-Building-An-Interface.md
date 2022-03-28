@@ -799,3 +799,8 @@
       ```
     - Note 6: lastly for the `AddAppointment.js` component, we need to make sure that we are passing as properties/parameters the `lastId` index number, and the `onSendAppointment` function:    
       `const AddAppointment = ({ onSendAppointment, lastId }) => { .... }`
+  - Here is the modified `App.js` component file:
+    ```
+    
+    ```
+    - Note 1: We need to declare the two properties that are passed between `App.js` and `AddAppointment.js`, in the location where `AddAppointment` subcomponent is called by the parent `App` component:
