@@ -3,6 +3,7 @@
 
 ### Section 1: what is React
 
+- React is a popular JavaScript library for creating user interfaces (in single age applications)
 - To add React Developer Tools extension to Chrome:
     - <https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en>
 - To add React Developer Tools extension to FIrefox:
@@ -71,7 +72,7 @@
         - You can put any valid JavaScript expression inside the curly braces in JSX. For example, `2 + 2`, `user.firstName`, or `formatName(user)` are all valid JavaScript expressions.
         - Specifying Attributes with JSX:
             - You may use quotes to specify string literals as attributes:
-                - `const element = <a href="https://www.reactjs.org"> link </a>;
+                - `const element = <a href="https://www.reactjs.org"> link </a>;`
             - You may also use curly braces to embed a JavaScript expression in an attribute:
                 - `const element = <img src={user.avatarUrl}></img>;`
             - Don’t put quotes around curly braces when embedding a JavaScript expression in an attribute. You should either use quotes (for string values) or curly braces (for expressions), but not both in the same attribute.
