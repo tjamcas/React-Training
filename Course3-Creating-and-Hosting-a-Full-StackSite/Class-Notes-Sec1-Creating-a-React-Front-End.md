@@ -168,3 +168,24 @@ The Section 1 videos reference an older version of React for setting up the fron
 
   export default ArticlePage
   ```
+- __URL Parameters with react-router__
+  - In this section, we will modify the `ArticlePage` component
+    - We want to structure our application so that each article has its own URL. The desired behavior is to display blog articles so that if we navigate to `/article/article-name`, it will display that specific article. For example, `/article/learn-react` should route the user to an article about learning React.
+    - We can accomplish this with URL parameters.
+    - In `/src/App.js`, we define a route to an article/page, and we append a ':' and a variable name to the route:    
+      `<Route path="/article/:name" element={<ArticlePage />} />`
+      - The URL parameter is `:name`
+      - When react-router sees a URL parameter in the `Route path`, it passes a `prop` with the value of the parameter/variable to the component named in the route. In this case, the `name` prameter/variable and its string value get passed to the component `<ArticlePage />`.
+    - In `/pages/ArticlePage.js`, the useParams hook returns an object of key/value pairs of the dynamic params from the current URL that were matched by the `Route path`. We will find `name` inside the params object, and can extract it and assign it to a local variable. For more info on the `useParams` hook, see <https://reactrouter.com/docs/en/v6/api#useparams> 
+      - We use destructuring syntax to extract `name` from the params object:   
+      `const { name } = useParams();`
+      - We reference `name` in our JSX:
+        `<h1>This is the {name} article ...</h1>`
+  - Here is the modified `/src/App.js` component:
+    ```
+    
+    ```
+  -Here is the modified `/pages/ArticlePage.js` component:
+    ```
+
+    ```
