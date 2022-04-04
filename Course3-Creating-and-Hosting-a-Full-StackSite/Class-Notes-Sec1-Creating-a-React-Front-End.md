@@ -168,7 +168,7 @@ The Section 1 videos reference an older version of React for setting up the fron
 
   export default ArticlePage
   ```
-- __URL Parameters with react-router__
+- __Video 6: URL Parameters with react-router__
   - In this section, we will modify the `ArticlePage` component
     - We want to structure our application so that each article can be called by its own URL. The desired behavior is to display blog articles so that if we navigate to `/article/article-name`, it will display that specific article. For example, `/article/learn-react` should route the user to an article about learning React.
       - We can accomplish this with URL parameters.
@@ -181,66 +181,71 @@ The Section 1 videos reference an older version of React for setting up the fron
           `const { name } = useParams();`
           - We reference `name` in our JSX:
             `<h1>This is the {name} article ...</h1>`
-    - We also have placed all of our blog articles in a single `.js` file that is an array of articles with in object form, and we want to use the objects in the array to create an article page.
-      - The blog articles reside in the file `/src/pages/article-content.js` and have the form:
-        ```
-        const articles = [
-            {
-                name: 'learn-react',
-                title: 'The Fastest Way to Learn React',
-                content: [
-                    `Welcome! Today we're going to be talking about the fastest way to
-                    learn React. We'll be discussing some topics such as proin congue
-                    ligula ... Praesent imperdiet nulla nec est luctus, at 
-                    sodales purus euismod.`,
-                    `Donec vel mauris lectus. Etiam ...ac vulputate urna lorem nec nisi. Morbi id 
-                    consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
-                    `Etiam nec lectus urna ... Vivamus accumsan dui in facilisis aliquet.`,
-                ]
-            },    {
-                name: 'learn-node',
-                title: 'How to Build a Node Server in 10 Minutes',
-                content: [
-                    `In this article, we're going to be talking looking at a very quick way
-                    to set up a Node.js server. We'll be discussing some topics such as proin congue
-                    ... sodales purus euismod.`,
-                    `Donec vel mauris lectus. Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-                    ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
-                    `Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-                    Nam blandit tristique risus, eget accumsan nisl interdum eu. Aenean ac accumsan 
-                    ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
-                ]
-            },     {
-                name: 'my-thoughts-on-resumes',
-                title: 'My Thoughts on Resumes',
-                content: [
-                    `Today is the day I talk about something which scares most people: resumes.
-                    In reality, I'm not sure why people have such a hard time with proin congue
-                    ... eleifend ut ipsum non fringilla. Praesent imperdiet nulla nec est luctus, at 
-                    sodales purus euismod.`,
-                    `Donec vel mauris lectus. Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-                    ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
-                    `Etiam nec lectus urna. Sed sodales ultrices dapibus. 
-                    ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
-                ]
-            },  
-        ];
+    - We also have placed all of our blog articles in a single `.js` file that is an array of articles in object form, and we want to use the objects in the array to create an article page.
+    - Each article in the array is an object with three (3) key-value pairs   
+      - 1. key: "name" / Value: String    
+      - 2. Key: "title" / Value: String   
+      - 3. Key: "content" / Value: an array of string, with each string representing a paragraph in the blog article
+    - The blog articles reside in the file `/src/pages/article-content.js` and have the form:
+      ```
+      const articles = [
+          {
+              name: 'learn-react',
+              title: 'The Fastest Way to Learn React',
+              content: [
+                  `Welcome! Today we're going to be talking about the fastest way to
+                  learn React. We'll be discussing some topics such as proin congue
+                  ligula ... Praesent imperdiet nulla nec est luctus, at 
+                  sodales purus euismod.`,
+                  `Donec vel mauris lectus. Etiam ...ac vulputate urna lorem nec nisi. Morbi id 
+                  consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
+                  `Etiam nec lectus urna ... Vivamus accumsan dui in facilisis aliquet.`,
+              ]
+          },    {
+              name: 'learn-node',
+              title: 'How to Build a Node Server in 10 Minutes',
+              content: [
+                  `In this article, we're going to be talking looking at a very quick way
+                  to set up a Node.js server. We'll be discussing some topics such as proin congue
+                  ... sodales purus euismod.`,
+                  `Donec vel mauris lectus. Etiam nec lectus urna. Sed sodales ultrices dapibus. 
+                  ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
+                  `Etiam nec lectus urna. Sed sodales ultrices dapibus. 
+                  Nam blandit tristique risus, eget accumsan nisl interdum eu. Aenean ac accumsan 
+                  ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
+              ]
+          },     {
+              name: 'my-thoughts-on-resumes',
+              title: 'My Thoughts on Resumes',
+              content: [
+                  `Today is the day I talk about something which scares most people: resumes.
+                  In reality, I'm not sure why people have such a hard time with proin congue
+                  ... eleifend ut ipsum non fringilla. Praesent imperdiet nulla nec est luctus, at 
+                  sodales purus euismod.`,
+                  `Donec vel mauris lectus. Etiam nec lectus urna. Sed sodales ultrices dapibus. 
+                  ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
+                  `Etiam nec lectus urna. Sed sodales ultrices dapibus. 
+                  ... consequat quam. Vivamus accumsan dui in facilisis aliquet.`,
+              ]
+          },  
+      ];
 
-        export default articles;
-        ```
-      - In `/src/pages/ArticlePage.js`, we use the `name` variable that we have extracted from the user requested URL, to find the correct article:   
-        `const article = articleContent.find(article => article.name === name);`
-      - Then, we display it's title and content to the appropriately named article page:
-        ```
-        return(
-            <>
-                <h1>{article.title}</h1>
-                {article.content.map((paragraph,key) => (
-                    <p key={key}>{paragraph}</p>
-                ))}
-            </>
-        );
-        ```
+      export default articles;
+      ```
+    - In `/src/pages/ArticlePage.js`, we use the `name` variable that we have extracted from the user requested URL, to find the correct article:   
+      `const article = articleContent.find(article => article.name === name);`
+    - Remember: the `article` object has three key-value pairs. One of them, `content` is an array of strings. Each string is a paragraph of the blog article. Therefore, `article.content` is an iterable that can use the `map` method.
+    - Then, we display it's title and content to the appropriately named article page:
+      ```
+      return(
+          <>
+              <h1>{article.title}</h1>
+              {article.content.map((paragraph,key) => (
+                  <p key={key}>{paragraph}</p>
+              ))}
+          </>
+      );
+      ```
   - Here is the modified `/src/App.js` component:
     ```
     import React from 'react';
