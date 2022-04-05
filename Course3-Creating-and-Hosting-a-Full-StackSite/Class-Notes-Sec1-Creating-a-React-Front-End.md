@@ -334,3 +334,47 @@ The Section 1 videos reference an older version of React for setting up the fron
           </Link>))
       }
       ```
+- __Video 7: Making the Articles List Modular__
+  - We will refactor our code to make the articles list that we just created reusable.
+    - This will require pulling out the articles list code into its own component
+    - The existing `ArticlesList` component will be renamed to `ArticlesListPage`, and the new component will be named `ArticlesList`
+    - We will have to edit all previous references to `ArticlesList` in `App.js`.
+    - We will have to rename `ArticlesList.js` to `ArticlesListPage.js` and edit all previous references to `ArticlesList` in this file as well.
+  - Here is the code for `/src/components/ArticlesList.js`:
+    ```
+    import React from "react";
+    import { Link } from "react-router-dom";
+
+    const ArticlesList = ({ articles }) => (
+        <>
+        {articles.map((article, key) => (
+            <Link className="article-list-item" key={key} to={`/article/${article.name}`}>
+                <h3>{article.title}</h3>
+                <p>{article.content[0].substring(0, 150)}...</p>
+            </Link>))
+        }
+        </>
+    );
+
+    export default ArticlesList;
+    ```
+    - Note 1: We copy the `{articleContent.map((article, key) => ...}` codeblock from `ArticlesListPage.js` and place it in our new component with some modification -- see next note.
+    - Note 2: We add a prop named `articles` to the `ArticlesList` component rather than importing `article-content.js` -- this makes the component reusable and any parent component can call it with different arrays of articles.
+  - Here is the code for `/src/pages/ArticlesListPage.js`:
+    ```
+    import { React } from "react";
+    import articleContent from "./article-content";
+    import ArticlesList from "../components/ArticlesList";
+
+    const ArticlesListPage = () => (
+        <>
+            <h1>Articles</h1>
+            <ArticlesList articles={articleContent} />
+        </>
+    );
+
+    export default ArticlesListPage;
+    ```
+    - Note 1: We remove the `{articleContent.map((article, key) => ...}` codeblock and replace it with the new subcomponent `<ArticlesList />` subcomponent:    
+      `<ArticlesList articles={articleContent} />`
+      - Note we are passing an `articles` prop to the `<ArticlesList />` subcomponent
