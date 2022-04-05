@@ -378,3 +378,80 @@ The Section 1 videos reference an older version of React for setting up the fron
     - Note 1: We remove the `{articleContent.map((article, key) => ...}` codeblock and replace it with the new subcomponent `<ArticlesList />` subcomponent:    
       `<ArticlesList articles={articleContent} />`
       - Note we are passing an `articles` prop to the `<ArticlesList />` subcomponent
+- __Video 8: Creating a 404 Page in React__
+  - This video demonstrates how to code a generic 404 error page if we try to request an URL that does not exist in our app.
+  - Here is the new `/src/pages/NotFoundPage.js` component file:
+    ```
+    import React from "react";
+
+    const NotFoundPage = () => (
+        <h1>404: Page Not Found</h1>
+    );
+
+    export default NotFoundPage;
+    ```
+  - Here is the modified `/src/pages/ArticlesPage.js` component file:
+    ```
+    import { React } from "react";
+    import { useParams } from "react-router-dom";
+    import ArticlesList from "../components/ArticlesList";
+    import articleContent from "./article-content";
+    import NotFoundPage from "./NotFoundPage";
+
+    const ArticlePage = ( ) => {
+        const { name } = useParams();
+        const article = articleContent.find(article => article.name === name);
+        const otherArticles = articleContent.filter(article => article.name !== name);
+
+        if (!article) return <NotFoundPage />
+
+        return(
+            <>
+                <h1>{article.title}</h1>
+                {article.content.map((paragraph,key) => (
+                    <p key={key}>{paragraph}</p>
+                ))}
+                <h3>Other Articles:</h3>
+                <ArticlesList articles={otherArticles} />
+            </>
+        );
+    }
+
+    export default ArticlePage
+    ```
+    - Note 1: We have to import the `NotFoundPage` component and modify are `if` statement that looks for an article:   
+      `if (!article) return <NotFoundPage />`
+  - Here is the modified `/src/App.js` component file:
+    ```
+    import React from 'react';
+    import { Routes, Route } from "react-router-dom";
+    import HomePage from './pages/HomePage';
+    import AboutPage from './pages/AboutPage';
+    import ArticlesListPage from './pages/ArticlesListPage';
+    import ArticlePage from './pages/ArticlePage';
+    import NotFoundPage from './pages/NotFoundPage';
+    import NavBar from "./NavBar";
+    import './App.css';
+
+    function App() {
+
+      return (
+        <div className="App">
+          <NavBar />
+          <div id="page-body">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/articles-list" element={<ArticlesListPage />} />
+              <Route path="/article/:name" element={<ArticlePage />} />
+              <Route path= "*" element={<NotFoundPage />} />
+            </Routes>
+          </div>
+        </div>
+      ); 
+    }
+
+    export default App;
+    ```
+    - Note 1: we import the `NotFoundPage` component, and add a new route statement to capture undefined page URL's:    
+      `<Route path= "*" element={<NotFoundPage />} />`
