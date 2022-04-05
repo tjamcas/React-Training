@@ -298,3 +298,39 @@ The Section 1 videos reference an older version of React for setting up the fron
 
     export default ArticlePage
     ```
+- __Video 7: Creating and Linking the Articles List__
+  - In this video we edit the `ArticlesList` component to allow users to see a listing of all the blog articles and select one to open that blog entry.
+  - Here is the revised `/src/pages/ArticlesList.js` component file:
+    ```
+    import { React } from "react";
+    import { Link } from "react-router-dom";
+    import articleContent from "./article-content";
+
+    const ArticlesList = () => (
+        <>
+            <h1>Articles</h1>
+            {articleContent.map((article, key) => (
+                <Link className="article-list-item" key={key} to={`/article/${article.name}`}>
+                    <h3>{article.title}</h3>
+                    <p>{article.content[0].substring(0, 150)}...</p>
+                </Link>))
+            }
+        </>
+    );
+
+    export default ArticlesList;
+    ```
+    - Note 1: there are two new imports:    
+      ```
+      import { Link } from "react-router-dom";
+      import articleContent from "./article-content";
+      ```
+    - Note 2: recall that `articleContent` is an iterable array of article objects. We will map each article object into a JSX expression:    
+      ```
+      {articleContent.map((article, key) => (
+          <Link className="article-list-item" key={key} to={`/article/${article.name}`}>
+              <h3>{article.title}</h3>
+              <p>{article.content[0].substring(0, 150)}...</p>
+          </Link>))
+      }
+      ```
