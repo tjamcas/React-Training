@@ -1,7 +1,7 @@
-# Course 3: React: Creating a React Front End
+# Course 3: React: Creating and Hosting a Full Stack Site
 ## Class Notes / Section 1
 
-### Section 1: Setting-Up-a-React-Project
+### Section 1: Creating a React Front End
 #### Note:
 The Section 1 videos reference an older version of React for setting up the front end webpages. As a result the `Router` and `Route` syntax and structure is out of date, and while the instructor code will compile, it will not display the web pages. The appropriate front end code should look like the following, corrected files after completing Section 1, Video 5 "Using React Router Links" ...
 - `/my-blog/src/index.js`:
