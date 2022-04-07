@@ -32,7 +32,7 @@
     - Note 1: we create our backend app with the following line:    
       'const app = express();`
     - Note 2:  with the `app` object we can define different endpoints for our app, and how the app responds when an endpoint is requested.
-      - Generic pattern: `app.get('endpointURL', (reg, res) => callbackFunction );
+      - ___Generic pattern to handle a user `GET` request:___ `app.get('endpointURL', (reg, res) => callbackFunction );
         - The first parameter within the callback function is the request object:
           - it is usually abbreviated as req, and contains details about the request that we received
         - The second parameter is the response object:
@@ -45,3 +45,50 @@
       - You should see the 'Hello!' message in the browser window
 - __Video 3: Testing an Express server with Postman__
   - Postman can be used to preform more complicated testing operations on the backend server, and to develop the backend server first (before developing and integrating the front end code).
+  - Postman link: <https://web.postman.co/home>
+  - In Postman we will send `GET` and `POST` requests to the `localhost:8000` server
+    - `GET` requests get information from the server, and usually the only information they carry is contained inside the requested URL
+      - ___Generic route pattern to handle a user `GET` request:___ `app.get('endpointURL', (reg, res) => callbackFunction );
+        - The first parameter within the callback function is the request object:
+          - it is usually abbreviated as req, and contains details about the request that we received
+        - The second parameter is the response object:
+          - it is usually abbreviated as res, and is used to send a response back to whoever sent the request
+      - Example: `app.get('/hello', (req, res) => res.send('Hello!'));`
+    - `POST` requests modify something on the server, and carry additionaly information in the request body
+      - ___Generic route pattern to handle a user `POST` request (the route looks just like a `GET` request:___ `app.post('endpointURL', (reg, res) => callbackFunction );
+        - The first parameter within the callback function is the request object:
+          - it is usually abbreviated as req, and contains details about the request that we received
+        - The second parameter is the response object:
+          - it is usually abbreviated as res, and is used to send a response back to whoever sent the request
+      - Example: `app.post('/hello', (req, res) => res.send('Hello!'));`
+  - Sending data in the `POST` body request
+    - In the following example, we will add a `body` object to a "POST" request. The `body` object will contain a `name` property. We will create a route in the `server.js` file that can prse the `body` object and use the value of the `name` property in the formulation of the server's response.
+    - The `POST` request body must be configured in Postman to "raw" with a JSON object, for example:
+      ```
+      {
+          "name": "Tim"
+      }
+      ```
+    - We install the "body parser" NPM module that allows the server to extract the JSON data that is sent along with the endpoint request by using the follow terminal command:   
+      `npm install --save body-parser`
+    - `/src/server.js` is modified:
+      ```
+      import express from 'express';
+      import bodyParser from 'body-parser';
+
+      const app = express();
+
+      app.use(bodyParser.json());
+
+      app.get('/hello', (req, res) => res.send('Hello!'));
+      app.post('/hello', (req, res) => res.send(`Hello ${req.body.name}!`));
+
+      app.listen(8000, () => console.log('Listening on port 8000'));
+      ```
+      - Note 1: We need to add an `import` statement for body parser
+      - Note 2: The following line adds a `body` property to the request and gives `app` the ability to use body-parser to interpret the JSON object contained in the `body` property/parameter:    
+        `app.use(bodyParser.json());`
+      - Note 3: To access the `name` property in our response, we code the following JavaScript literal:
+        `app.post('/hello', (req, res) => res.send(`Hello ${req.body.name}!`));`
+      - Note 4: after making these changes in the `server.js` code, we need to stop and re-start the Express server (`npx babel-node src/server.js')
+    - With these changes, the server will respond to the endpoint, '/hello', with "Hello Tim!"
