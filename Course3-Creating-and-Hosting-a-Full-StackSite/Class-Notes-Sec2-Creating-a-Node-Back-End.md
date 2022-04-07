@@ -92,3 +92,98 @@
         `app.post('/hello', (req, res) => res.send(`Hello ${req.body.name}!`));`
       - Note 4: after making these changes in the `server.js` code, we need to stop and re-start the Express server (`npx babel-node src/server.js')
     - With these changes, the server will respond to the endpoint, '/hello', with "Hello Tim!"
+- __Video 4: Route parameters in Express__
+  - We can also extract information from the user specified URL endpoint. This information is carried in a "route parameter", AKA "url parameter', that is part of the user-specified URL endpoint string.
+  - Here is an example with a modified `server.js` that uses a route parameter within a GET request route:
+    ```
+    import express from "express";
+    import bodyParser from "body-parser";
+
+    const app = express();
+
+    app.use(bodyParser.json());
+
+    app.get('/hello', (req, res) => res.send('Hello'));
+    app.get('/hello/:name', (req, res) => res.send(`Hello ${req.params.name}!`));
+    app.post('/hello', (req, res) => res.send(`Hello ${req.body.name}!`));
+
+    app.listen(8000, () => console.log('Listening on port 8000'));
+    ```
+    - Note 1: We add a new route with the `:name` route parameter in the following line:    
+      `app.get('/hello/:name', (req, res) => res.send(`Hello ${req.params.name}!`));`
+    - Note 2: we could have added the following route for a POST request and have gotten the same results:
+      `app.post('/hello/:name', (req, res) => res.send(`Hello ${req.params.name}!`));`
+- __Video 5: Upvoting articles__
+  - In the following example, we will upvote blog-articles and keep track of the number of up votes each article receives.
+    - Up votes will be registered at a URL endpoint of the form:    
+      `http://localhost:8000/api/articles/:name/upvote`
+      - Note that we are using a route parameter in our endpoint to specify the name of the blog article that we want to up vote
+      - The use of `.../api/...` in the endpoint will become apparent/be explained in a later video
+    - Normally, we would track the up votes in a persistent database but for this example we store vote tallies using a temporary variable that will reset when the server is re-started
+      - The variable is a JSON object that contains objects for each article and its corresponding number of votes:
+        ```
+        const articlesInfo = {
+            'learn-react': {
+                upvotes: 0,
+            },
+            'learn-node': {
+                upvotes: 0,
+            },
+            'my-thoughts-on-resumes': {
+                upvotes: 0,
+            },
+        }
+        ```
+    - We create a new POST endpoint route with a callback funtion that increments an article's `upvotes` value. We access the correct article using a route parameter, `:name`:
+      ```
+      app.post('/api/articles/:name/upvote', (req, res) => {
+          const articleName = req.params.name;
+          articlesInfo[articleName].upvotes += 1;
+          res.status(200).send(`${articleName} now has ${articlesInfo[articleName].upvotes} votes`);
+      });
+      ```
+  - Here is the entire code in the modified `server.js` file:
+    ```
+    import express from "express";
+    import bodyParser from "body-parser";
+
+    const app = express();
+
+    const articlesInfo = {
+        'learn-react': {
+            upvotes: 0,
+        },
+        'learn-node': {
+            upvotes: 0,
+        },
+        'my-thoughts-on-resumes': {
+            upvotes: 0,
+        },
+    }
+
+    app.use(bodyParser.json());
+
+    app.post('/api/articles/:name/upvote', (req, res) => {
+        const articleName = req.params.name;
+        articlesInfo[articleName].upvotes += 1;
+        res.status(200).send(`${articleName} now has ${articlesInfo[articleName].upvotes} votes`);
+    });
+
+    app.listen(8000, () => console.log('Listening on port 8000'));
+    ```
+- __Video 6: Automatically updating with nodemon__
+  - We can use the npm package, `nodemon`, to detect when a change has been made to `/src/server.js`, and automatically restart the server. This will save us from manually stopping (`<CTL>-C`) and restarting the server (`npx babel-node src/server.js`) in a terminal shell.
+  - To install `nodemon`:   
+    `npm install --save-dev nodemon`
+  - To activate `nodemon` with `server.js`:
+    `npx nodemon --exec babel-node src/server.js`
+    - This command instructs `nodemon' to rerun the command after `--exec` -- i.e., `babel-node src/server.js` -- whenever there is a change in `server.js`
+- We can specify a shortcut to our lengthy `npx nodemon --exec babel-node src/server.js` command in `package.json`:
+  ```
+  "scripts": {
+    "start": "npx nodemon --exec babel-node src/server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  ```
+- To start the server, we issue the terminal shell command:   
+  `npm start`
