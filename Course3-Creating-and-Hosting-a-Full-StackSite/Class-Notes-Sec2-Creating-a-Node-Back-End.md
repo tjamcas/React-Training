@@ -177,7 +177,7 @@
     `npm install --save-dev nodemon`
   - To activate `nodemon` with `server.js`:
     `npx nodemon --exec babel-node src/server.js`
-    - This command instructs `nodemon' to rerun the command after `--exec` -- i.e., `babel-node src/server.js` -- whenever there is a change in `server.js`
+    - This command instructs `nodemon` to rerun the command after `--exec` -- i.e., `babel-node src/server.js` -- whenever there is a change in `server.js`
 - We can specify a shortcut to our lengthy `npx nodemon --exec babel-node src/server.js` command in `package.json`:
   ```
   "scripts": {
