@@ -13,13 +13,13 @@
   - /5. Node.js does not support JavaScript ES6 syntax, but there are changes we can manually make to allow use of ES6:
     - 5a. Install Babel transpiler which interprets ES6:    
       `npm install --save-dev @babel/core @babel/node @babel/preset-env`
-    - 5b. Create and configure `/my-blog-backend/.babelrc` file where we tell Babel how we want it to transform the ES6 code that we write into common JS code that Node.js can execute:
+    - 5b. Create and configure `/my-blog-backend/.babelrc` file where we tell Babel how we want it to transform the ES6 code that we write into common JS code that Node.js can execute:    
       ```
       {
           "presets": ["@babel/preset-env"]
       }
       ```
-  - /6. Create and edit the file `/my-blog-backend/src/server.js` - this will be the netry point for our server. Here is a simple file that responds to the user entered URL endpoint `/hello`:
+  - /6. Create and edit the file `/my-blog-backend/src/server.js` - this will be the netry point for our server. Here is a simple file that responds to the user entered URL endpoint `/hello`:   
     ```
     import express from 'express';
 
@@ -39,3 +39,9 @@
           - it is usually abbreviated as res, and is used to send a response back to whoever sent the request
       - Example: `app.get('/hello', (req, res) => res.send('Hello!'));`
     - Note 3: we start the server with `app.listen(8000, () => console.log('Listening on port 8000'));`
+  - /7. Finally, we issue the command for Node.js to run the Express server:    
+    `npx babel-node src/server.js`
+    - To see if the server set up has worked, enter the endpoint into your browser: `http://localhost:8000/hello`
+      - You should see the 'Hello!' message in the browser window
+- __Video 3: Testing an Express server with Postman__
+  - Postman can be used to preform more complicated testing operations on the backend server, and to develop the backend server first (before developing and integrating the front end code).
