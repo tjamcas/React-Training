@@ -1,7 +1,7 @@
 # Course 3: React: Creating and Hosting a Full Stack Site
 ## Class Notes / Section 2
 
-### Section 2: Setting-Up-a-React-Projectideo 1
+### Section 2: Setting-Up-a-React-Project
 - __Video 1: Why Node.js__
   - Node.js allows the backend to be coded in JavaScript rather than PHP or some other language
   - We are using the Express NPM package to code the server
@@ -134,7 +134,7 @@
             },
         }
         ```
-    - We create a new POST endpoint route with a callback funtion that increments an article's `upvotes` value. We access the correct article using a route parameter, `:name`:
+    - We create a new POST endpoint route with a callback function that increments an article's `upvotes` value. We access the correct article using a route parameter, `:name`:
       ```
       app.post('/api/articles/:name/upvote', (req, res) => {
           const articleName = req.params.name;
@@ -178,12 +178,57 @@
   - To activate `nodemon` with `server.js`:
     `npx nodemon --exec babel-node src/server.js`
     - This command instructs `nodemon` to rerun the command after `--exec` -- i.e., `babel-node src/server.js` -- whenever there is a change in `server.js`
-- We can specify a shortcut to our lengthy `npx nodemon --exec babel-node src/server.js` command in `package.json`:
-  ```
-  "scripts": {
-    "start": "npx nodemon --exec babel-node src/server.js"
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  ```
-- To start the server, we issue the terminal shell command:   
-  `npm start`
+  - We can specify a shortcut to our lengthy `npx nodemon --exec babel-node src/server.js` command in `package.json`:
+    ```
+    "scripts": {
+      "start": "npx nodemon --exec babel-node src/server.js"
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    ```
+  - To start the server, we issue the terminal shell command:   
+    `npm start`
+- __Video 7 & 8: Adding comments functionality__
+  - In the next two videos, the app server code is updated with an additional feature that captures user comments about a blog article.
+  - Like the previous code for up voting, this code identifies which article the user is cmmenting on by using a route pattern in the URL.
+  - In addition this code receives and extracts the user's id and comments from the user's POST request body.
+  - in the `server.js` code, the user id and comments, along with the up vote count, are stored in the `articlesInfo` variable. The use of this temporary variable is non-persistent. This shortcoming will be addressed in the next section which explains MongoDB. 
+  - The POST request body will once again be a raw JSON object and look like the following with two properties for the comment text and the name of the user who wrote the comment:
+    ```
+    {
+        "username": "Tim",
+        "text": "Very enlightening article!"
+    }
+    ```
+  - The `server.js` file will have a couple of updates
+    - First, the `articlesInfo` variable is updated to capture an array of comments for each article:
+      ```
+      const articlesInfo = {
+          'learn-react': {
+              upvotes: 0,
+              comments: []
+          },
+          'learn-node': {
+              upvotes: 0,
+              comments: []
+          },
+          'my-thoughts-on-resumes': {
+              upvotes: 0,
+              comments: []
+          },
+      }
+      ```
+    - Second, a new POST route is added with a callback function:
+      ```
+      app.post('/api/articles/:name/add-comment', (req, res) => {
+          const { username, text } = req.body;
+          const articleName = req.params.name;
+          articlesInfo[articleName].comments.push({username,text});
+          res.status(200).send(articlesInfo[articleName]);
+      });
+      ```
+      - Using object destructuring, we extract the user name and their comment text from the POST request body using `params`:    
+        `const { username, text } = req.body;`
+      - We push an object containing the `username` and comment `text` strings onto the article's `comments` array:   
+        `articlesInfo[articleName].comments.push({username,text});`
+      - Finally, we send a response that includes the `200` status as well as the updated object for the commented article:   
+        `res.status(200).send(articlesInfo[articleName]);`
