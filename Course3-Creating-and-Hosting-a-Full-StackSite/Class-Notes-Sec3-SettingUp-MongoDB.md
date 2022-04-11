@@ -24,3 +24,30 @@
       - To stop a mongod running as a macOS service, use the following command as needed:   
         `brew services stop mongodb-community@5.0`
     - If you're having a database (`/data/db`) not found issue, reference this video: <https://www.youtube.com/watch?v=AIGabiOixzc>
+  - /4. To create a new database:   
+      `use my-blog`
+  - /5. To create a new article:
+    - In MongoDB, each database is composed of a few or many _collections_. These collections can contain any number of JSON objects called _documents_
+    - In the example below, we create a collection called 'articles' -- so, `articles` is a collection (i.e., array) of documents (i.e., JSON objects)
+      ```
+      db.articles.insert([{
+      name: 'learn-react',
+      upvotes: 0,
+      comments: [],
+      }, {
+      name: 'learn-node',
+      upvotes: 0,
+      comments: [],
+      }, {
+      name: 'my-thoughts-on-resumes',
+      upvotes: 0,
+      comments: [],
+      }])
+      ```
+    - __The `db.articles.insert()` command is deprecated -- use `db.articles.insertMany()` (or `insertOne` or `bulkWrite`) instead__
+  - /6. To see what is in our articles collection:    
+    `db.articles.find({})`
+    - To find specific articles insert your criteria between the curly braces, for example:   
+      `db.articles.find({name: 'learn-react'})`
+    - Or to find a single article:    
+       `db.articles.findOne({name: 'learn-react'})`
