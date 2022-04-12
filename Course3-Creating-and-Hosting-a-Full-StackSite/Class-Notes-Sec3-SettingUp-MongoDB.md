@@ -51,3 +51,84 @@
       `db.articles.find({name: 'learn-react'})`
     - Or to find a single article:    
        `db.articles.findOne({name: 'learn-react'})`
+- __Video 3: Adding MongoDB to Express__
+  - To install MongoDB package into our Node Express server project, go into your server directory (in this tutorial, that would be 'my-blog-backend`):    
+    `npm install --save mongodb`
+  - We can now use this installed MongoDB driver to connect to and manipulate our database. As a result, we no longer need and can delete the 'temporary database' `articlesInfo` object variable that is in `/my-blog-backend/src/server.js`. Instead, we will manipulate the `articles` database. This database will also be persistent and we won't lose our edits when we start and stop the server.
+  - We need to import the MongoDB tools and driver we installed into the project:   
+    `import { MongoClient } from "mongodb";`
+  - We need to create a new `GET` route for when a user requests a specific article -- we will:
+    - /1. use the route parameters to get the specific name of the article:    
+      `app.get('/api/articles/:name', (req, res) => { ... }`
+    - /2. We will connect to our database with the `MongoClient.connect` command which also returns a client object that we can use to query the database
+      ```
+      const mongoClient = new MongoClient('mongodb://localhost/27017');
+      mongoClient.connect(async (error, client) => {
+      ...
+      }
+      ```
+    - /3. To be able to query the database we issue the command:    
+      `const db = client.db('my-blog');`
+    - /4. To query the database for the article that the user requested, we write this command:   
+      `const articleInfo = await db.collection(`articles`).findOne({ name: articleName })`
+    - /5. To return the article that was requested to the user:   
+      `res.status(200).json(articleInfo);`
+    - /6. Remember to always close the connection to the database:    
+      `client.close();`
+    - Helpful link: <https://1sherlynn.medium.com/how-to-handle-errors-in-asynchronous-javascript-code-when-working-with-callbacks-dcd32bca4b6b>. Discussion of error-first callback, which is a common pattern used in Javascript, especially in NodeJS. Also see this explanation: <https://stackoverflow.com/questions/31375728/node-js-callback-function-error-parameter-explanation>.
+  - Here is the full, working code for `/my-blog-backend/src/server.js`:
+    ```
+    import express from "express";
+    import bodyParser from "body-parser";
+    import { MongoClient } from "mongodb";
+
+    const app = express();
+
+    const articlesInfo = {
+        'learn-react': {
+            upvotes: 0,
+            comments: []
+        },
+        'learn-node': {
+            upvotes: 0,
+            comments: []
+        },
+        'my-thoughts-on-resumes': {
+            upvotes: 0,
+            comments: []
+        },
+    }
+
+    app.use(bodyParser.json());
+
+    app.get('/api/articles/:name', (req, res) => {
+        try {
+            const articleName = req.params.name;
+            const mongoClient = new MongoClient('mongodb://localhost/27017');
+            mongoClient.connect(async (error, client) => {
+                const db = client.db('my-blog');
+                const articleInfo = await db.collection(`articles`).findOne({ name: articleName })
+                res.status(200).json(articleInfo);
+                client.close();
+            })
+        } 
+        catch (error) {
+            res.status(500).json({message: 'Error connecting to database', error});
+        }    
+    })
+
+    app.post('/api/articles/:name/upvote', (req, res) => {
+        const articleName = req.params.name;
+        articlesInfo[articleName].upvotes += 1;
+        res.status(200).send(`${articleName} now has ${articlesInfo[articleName].upvotes} votes!`);
+    });
+
+    app.post('/api/articles/:name/add-comment', (req, res) => {
+        const { username, text } = req.body;
+        const articleName = req.params.name;
+        articlesInfo[articleName].comments.push({username,text});
+        res.status(200).send(articlesInfo[articleName]);
+    });
+
+    app.listen(8000, () => console.log('Listening on port 8000'));
+    ```
