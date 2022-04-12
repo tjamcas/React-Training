@@ -76,6 +76,7 @@
     - /6. Remember to always close the connection to the database:    
       `client.close();`
     - Helpful link: <https://1sherlynn.medium.com/how-to-handle-errors-in-asynchronous-javascript-code-when-working-with-callbacks-dcd32bca4b6b>. Discussion of error-first callback, which is a common pattern used in Javascript, especially in NodeJS. Also see this explanation: <https://stackoverflow.com/questions/31375728/node-js-callback-function-error-parameter-explanation>.
+    - Helpful link: <https://mongodb.github.io/node-mongodb-native/3.0/tutorials/connect/> for tutorial on MongoDb version 3.0 of the Node.js driver documentation. See also <https://www.mongodb.com/docs/drivers/node/current/> for version 4.5 of MongoDB Node.js driver.
   - Here is the full, working code for `/my-blog-backend/src/server.js`:
     ```
     import express from "express";
@@ -107,7 +108,7 @@
             const mongoClient = new MongoClient('mongodb://localhost/27017');
             mongoClient.connect(async (error, client) => {
                 const db = client.db('my-blog');
-                const articleInfo = await db.collection(`articles`).findOne({ name: articleName })
+                const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
                 res.status(200).json(articleInfo);
                 client.close();
             })
@@ -132,3 +133,45 @@
 
     app.listen(8000, () => console.log('Listening on port 8000'));
     ```
+- __Video 3: Rewriting the upvote endpoint__
+  - In a similar way to the get article endpoint above, we need to refactor the upvote endpoint to access and manipulate the persistent MongoDB database that we have created.
+    - We will use the URL parameter to receive the article name that the user wants to upvote.
+    - We will use the URL parameter to select the database record for the article that the user specifies, and then increase the upvote property by 1.
+    - Finally, we will send the user a status and the database record for the article.
+  - The upvote POST route, looks similar to the GET article route pattern with the following additional `updateOne` query to increase the number of upvotes:
+    ```
+    await db.collection('articles').updateOne( {name: articleName}, {
+        '$set': {
+            upvotes: articleInfo.upvotes + 1,
+        },
+    } )
+    ```
+  - After updating the article upvote count, then we send a repsonse to the user with a `200` status along with the full, modified article:
+    ```
+    const updatedArticleInfo = await db.collection(`articles`).findOne({ name: articleName });
+    res.status(200).json(updatedArticleInfo);
+    ```
+- The updated upvote route pattern in the `/my-blog-backend/src/server.js` file is as follows:
+  ```
+  app.post('/api/articles/:name/upvote', (req, res) => {
+      try {
+          const articleName = req.params.name;
+          const mongoClient = new MongoClient('mongodb://localhost/27017');
+          mongoClient.connect(async (error, client) => {
+              const db = client.db('my-blog');
+              const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+              await db.collection('articles').updateOne( {name: articleName}, {
+                  '$set': {
+                      upvotes: articleInfo.upvotes + 1,
+                  },
+              } )
+              const updatedArticleInfo = await db.collection(`articles`).findOne({ name: articleName });
+              res.status(200).json(updatedArticleInfo);
+              client.close();
+          });
+      } 
+      catch (error) {
+          res.status(500).json({message: 'Error connecting to database', error});
+      }    
+  });
+  ```
