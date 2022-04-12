@@ -175,3 +175,124 @@
       }    
   });
   ```
+- __Video 3: Rewriting the comments endpoint__
+  - In the current version of the `server.js` code, there is alot of repeated code in the GET article and POST upvote route patterns, that will be repeated again in the POST comment route pattern.
+  - We will refactor the code to make it DRY - "Don't repeat yourself".
+  - We will extract the database setup and tear down code and put it into a function named `withDB` by:
+    - /1. copying the GET articles route pattern to the `withDB` function,
+    - /2. deleting the code that is unique to a particular GET or POST route pattern,
+    - /3. leaving the common, repeated code in the `withDB` function,
+    - /4. and call the "operation" function parameter -- i.e., `await operations(db);`
+  - Here is the `withDB` function:
+    ```
+    const withDB = async (operations, res) => {
+        try {
+            // REMOVE: const articleName = req.params.name;
+            const mongoClient = new MongoClient('mongodb://localhost/27017');
+            mongoClient.connect(async (error, client) => {
+                const db = client.db('my-blog');
+                // REMOVE: const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+                // REMOVE: res.status(200).json(articleInfo);
+                // ADD FOLLOWING LINE to call operations function parameter:
+                await operations(db);
+                client.close();
+            })
+        } 
+        catch (error) {
+            res.status(500).json({message: 'Error connecting to database', error});
+        }    
+    };
+    ```
+    - Note 1: the `withDB` function takes a function as a parameter -- we will name that parameter function `operations`
+    - Note 2: we need to pass the `res` response object to `withDB` so we can send a response to the user requested URL
+  - Next, we refactor the GET articles route pattern to remove the functionality we moved to `withDB` and to call `withDB`:
+    ```
+    app.get('/api/articles/:name', (req, res) => {
+    // REM  try {
+    // WRAP REMAINING UNDELETED CODE in call for withDB function
+        withDB(async (db) => {
+            const articleName = req.params.name;
+    // REM      const mongoClient = new MongoClient('mongodb://localhost/27017');
+    // REM      mongoClient.connect(async (error, client) => {
+    // REM         const db = client.db('my-blog');
+                const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+                res.status(200).json(articleInfo);
+    // REM         client.close();
+    // REM      })
+    // REM  } 
+    // REM  catch (error) {
+    // REM      res.status(500).json({message: 'Error connecting to database', error});
+    // REM  }
+        })
+
+    })
+    ```
+  - Here is the revised and cleaned up `withDB` function:
+    ```
+    const withDB = async (operations, res) => {
+        try {
+            const mongoClient = new MongoClient('mongodb://localhost/27017');
+            mongoClient.connect(async (error, client) => {
+                const db = client.db('my-blog');
+                await operations(db);
+                client.close();
+            }, res)
+        } 
+        catch (error) {
+            res.status(500).json({message: 'Error connecting to database', error});
+        }    
+    };
+    ```
+    - Note 1: we have to pass the `res` response object to `withDB` in case `withDB` needs to send a 500 error message to the user.
+  - Here is the revised and cleaned up GET articles route pattern:
+    ```
+    app.get('/api/articles/:name', (req, res) => {
+        withDB(async (db) => {
+            const articleName = req.params.name;
+            const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+            res.status(200).json(articleInfo);
+        }, res)
+    })
+    ```
+  - In a similar way, we refactor the POST upvote route pattern to remove the functionality we moved to `withDB` and to call `withDB`, and we also make sure that we pass the `res` response object to `withDB` in case `withDB` needs to send a 500 error message to the user:
+    ```
+    app.post('/api/articles/:name/upvote', (req, res) => {
+        withDB(async (db) => {
+            const articleName = req.params.name;
+            // REM: const mongoClient = new MongoClient('mongodb://localhost/27017');
+            // REM: mongoClient.connect(async (error, client) => {
+                // REM: const db = client.db('my-blog');
+                const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+                await db.collection('articles').updateOne( {name: articleName}, {
+                    '$set': {
+                        upvotes: articleInfo.upvotes + 1,
+                    },
+                } )
+                const updatedArticleInfo = await db.collection(`articles`).findOne({ name: articleName });
+                res.status(200).json(updatedArticleInfo);
+                // REM: client.close();
+            }, res);
+        } 
+        // REM: catch (error) {
+        //     REM: res.status(500).json({message: 'Error connecting to database', error});
+        // REM: }    
+    );
+    ```
+  - Here is the revised and cleaned up POST upvote route pattern:
+    ```
+    app.post('/api/articles/:name/upvote', (req, res) => {
+        withDB(async (db) => {
+            const articleName = req.params.name;
+            const articleInfo = await db.collection(`articles`).findOne({ name: articleName });
+            await db.collection('articles').updateOne( {name: articleName}, {
+                '$set': {
+                    upvotes: articleInfo.upvotes + 1,
+                },
+            } )
+            const updatedArticleInfo = await db.collection(`articles`).findOne({ name: articleName });
+            res.status(200).json(updatedArticleInfo);
+        }, res);
+    });
+    ```
+  - In a similar way, we refactor the POST add comment route pattern to remove the functionality we moved to `withDB` and to call `withDB`, and we also make sure that we pass the `res` response object to `withDB` in case `withDB` needs to send a 500 error message to the user:
+    
