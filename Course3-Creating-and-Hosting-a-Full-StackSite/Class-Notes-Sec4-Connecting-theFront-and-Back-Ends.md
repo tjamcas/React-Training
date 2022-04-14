@@ -124,3 +124,80 @@
     webpack 5.70.0 compiled successfully in 3330 ms
     
     ```
+- __Video 5: Displaying Comments__
+  - In this video, we want to take an article's comments (with their usernames), which have been stored in our MongoDB database, and and display them in the requested `ArticlePage` component.
+  - This will require us to:
+    - Create a new component `/my-blog/src/components/CommentsList.js` which will be the child component
+    - Modify the `/my-blog/src/pages/ArticlePage.js` component which will call the `CommentsList` component and pass a `comments` property.
+    - Recall that the `my-blog` database has a collection called `articles`. Each article in the `articles` collection has an object with a`name` string, `upvotes` integer, and a `comments` array. The comments array consists of zero or more objects with each object having a `username` and `text` value.
+  - Here is the new `CommentsList` component:
+    ```
+    import React from "react";
+
+    const CommentsList = ({ comments }) => (
+        <>
+        <h3>Comments:</h3>
+        {comments.map((comment, key) => (
+            <div className = "comments" key = {key}>
+                <h4>{comment.username}</h4>
+                <p>{comment.text}</p>
+            </div>
+        ))}
+        </>
+    );
+
+    export default CommentsList;
+    ```
+    - Note 1: As a reminder, in JavaScript, parentheses are used instead of curly brackets after an arrow function to return an object.
+    - Note 2: the `CommentsList` component/function receives the `comments` parameter from the parent component - in this case the parent is `ArticlePage`.
+    - Note 3: the `comment` property value is extracted from the MongoDb database and saved to a variable in the parent `ArticlePage`. `comment` is an array of objects, with each object containing a `username` and `text` value.
+      - `comment.username` and `comment.text` refer to those key-value pairs
+  - Here is the modified `ArticlePage` component:
+    ```
+    import React, { useState, useEffect } from "react";
+    import { useParams } from "react-router-dom";
+    import ArticlesList from "../components/ArticlesList";
+    import CommentsList from "../components/CommentsList";
+    import articleContent from "./article-content";
+    import NotFoundPage from "./NotFoundPage";
+
+    const ArticlePage = ( ) => {
+        const { name } = useParams();
+        const article = articleContent.find(article => article.name === name);
+
+        const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+
+        useEffect(() => {
+            const fetchData = async () => {
+                const result = await fetch(`/api/articles/${name}`);
+                const body = await result.json();
+                console.log(body);
+                setArticleInfo(body);
+            }
+            fetchData();
+        }, [name]);
+
+        if (!article) return <NotFoundPage />
+
+        const otherArticles = articleContent.filter(article => article.name !== name);
+
+        return(
+            <>
+                <h1>{article.title}</h1>
+                <p>This article post has been up voted {articleInfo.upvotes} times</p>
+                {article.content.map((paragraph,key) => (
+                    <p key={key}>{paragraph}</p>
+                ))}
+                <CommentsList comments={articleInfo.comments} />
+                <h3>Other Articles:</h3>
+                <ArticlesList articles={otherArticles} />
+            </>
+        );
+    }
+
+    export default ArticlePage;
+    ```
+    - Note 1: We import the `CommentsList` child component:   
+      `import CommentsList from "../components/CommentsList";`
+    - Note 2: the state variable, ` articleInfo`, was created with the `useState` hook and will receive the article upvotes and comments from the database based on the name of the article requested:    
+      `const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });`
