@@ -15,12 +15,50 @@
         `npm install --save whatwg-fetch`
       - /2. go to `index.js`, and add the following `import` statement on the first line:   
         `import 'whatwg-fetch';`
-- __Video 2: Adding React Hooks / Video 3: Calling useEffect at the Right Time__
+- __Video 2: Adding React Hooks / Video 3: Calling useEffect at the Right Time / Video 4: Adding Fetch to Pages__
   - In this section we will add functionality so that when we go to a specific article page, we query the server and display all comments about the article we navigated to.
   - This requires us to edit the `/my-blog/src/pages/ArticlePage.js` and add state to the component using the React `useState` and `useEffect` hooks.
   - Here is the modified code for `ArticlePage.js`:
     ```
-    
+    import React, { useState, useEffect } from "react";
+    import { useParams } from "react-router-dom";
+    import ArticlesList from "../components/ArticlesList";
+    import articleContent from "./article-content";
+    import NotFoundPage from "./NotFoundPage";
+
+    const ArticlePage = ( ) => {
+        const { name } = useParams();
+        const article = articleContent.find(article => article.name === name);
+
+        const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+
+        useEffect(() => {
+            const fetchData = async () => {
+                const result = await fetch(`/api/articles/${name}`);
+                const body = await result.json();
+                setArticleInfo(body);
+            }
+            fetchData();
+        }, [name]);
+
+        if (!article) return <NotFoundPage />
+
+        const otherArticles = articleContent.filter(article => article.name !== name);
+
+        return(
+            <>
+                <h1>{article.title}</h1>
+                <p>This article post has been up voted {articleInfo.upvotes} times</p>
+                {article.content.map((paragraph,key) => (
+                    <p key={key}>{paragraph}</p>
+                ))}
+                <h3>Other Articles:</h3>
+                <ArticlesList articles={otherArticles} />
+            </>
+        );
+    }
+
+    export default ArticlePage;
     ```
   - Note 1: Import the React hooks for `useState` and `useEffect`:    
     `import React, { useState, useEffect } from "react";`
@@ -42,8 +80,17 @@
     ```
       - Note 3a: The first argument of `useEffect` is an anonymous function to launch the side effects code. The second argument of `useEffect` is an array of values that useEffect should watch, and if one of them changes, useEffect should be called again -- here we are watching the `name` variable which will change when a user selects a new article name to view.
       - Note 3b: the `useEffect` hook does not allow its anonymous callback function to be asynchronous and use the `async` key word, so we devise a workaround where we create the aysnchronous function `fetchData` inside the callback function
-  - Note 4: We need to make a modification to the `package.json` on the `my-blog` client side and add a property called `proxy`. For the value of this `proxy`, put the address that our server is running at. Here, we're going to use `"proxy": "http://localhost/8000/",`. When we write the URL of requests to our server, for example when we use fetch, we can leave off this whole thing that we wrote for the proxy property. In other words, instead of writing ``fetch(`http://localhost:8000/api/articles/${name}`)`` we can simply write ``fetch(`/api/articles/${name}`)`` and the request will be automatically proxied/prefixed to the address that we defined in the package dot json file.
-- __WARNING:__ be sure to use the `npm start` command has been issued in a termnal window from both the client directory, `my-blog`, and the server directory, `my-blog-backend`. Failure to do so will result in errors! In my case I received a JSON error about an unexpected token: `VM270:1 Uncaught (in promise) SyntaxError: Unexpected token P in JSON at position 0`. I also received a proxy error: `Proxy error: Could not proxy request /api/articles/learn-node from localhost:3000 to http://localhost:8000/.`
+  - Note 4: We need to make a modification to the `package.json` on the `my-blog` client side and add a property called `proxy`. For the value of this `proxy`, put the address that our server is running at. Here, we're going to use `"proxy": "http://localhost/8000/",`. When we write the URL of requests to our server, for example when we use fetch, we can leave off the `http://localhost/8000` string that we wrote for the proxy property. In other words, instead of writing ``fetch(`http://localhost:8000/api/articles/${name}`)`` we can simply write ``fetch(`/api/articles/${name}`)`` and the request will be automatically proxied/prefixed to the address that we defined in the package dot json file. Here is a relevant snippet from `package.json`:
+    ```
+    {
+      "name": "my-blog",
+      "version": "0.1.0",
+      "private": true,
+      "proxy": "http://localhost:8000/",
+      ...
+    }
+    ```
+- __WARNING:__ be sure to use the `npm start` command has been issued in a termnal window from __BOTH__ the client directory, `my-blog`, and the server directory, `my-blog-backend`. __Failure to do so will result in errors!__ In my case I received a JSON error about an unexpected token: `VM270:1 Uncaught (in promise) SyntaxError: Unexpected token P in JSON at position 0`. I also received a proxy error: `Proxy error: Could not proxy request /api/articles/learn-node from localhost:3000 to http://localhost:8000/.`
   - From the `my-blog-backend` directory, run `npm start` and expect to see:
     ```
     Tims-MacBook-Pro:my-blog-backend tim$ npm start
