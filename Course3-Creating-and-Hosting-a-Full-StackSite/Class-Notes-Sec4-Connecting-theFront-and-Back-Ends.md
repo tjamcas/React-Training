@@ -15,7 +15,7 @@
         `npm install --save whatwg-fetch`
       - /2. go to `index.js`, and add the following `import` statement on the first line:   
         `import 'whatwg-fetch';`
-- __Video 2: Adding React Hooks__
+- __Video 2: Adding React Hooks / Video 3: Calling useEffect at the Right Time__
   - In this section we will add functionality so that when we go to a specific article page, we query the server and display all comments about the article we navigated to.
   - This requires us to edit the `/my-blog/src/pages/ArticlePage.js` and add state to the component using the React `useState` and `useEffect` hooks.
   - Here is the modified code for `ArticlePage.js`:
@@ -32,7 +32,48 @@
     - Second, we call the `useEffect` function ___inside___ the `ArticlePage` component function:
     ```
     useEffect(() => {
-        setArticleInfo({ upvotes: 3 });
-    });   
+        const fetchData = async () => {
+            const result = await fetch(`http://localhost:8000/api/articles/${name}`);
+            const body = await result.json();
+            setArticleInfo(body);
+        };
+        fetchData();
+    }, [name]);   
     ```
-      - Note 3a: The first argument of `useEffect` is an anonymous function to launch the side effects code. The second argument of `useEffect` is an array of values that useEffect should watch, and if one of them changes, useEffect should be called again.
+      - Note 3a: The first argument of `useEffect` is an anonymous function to launch the side effects code. The second argument of `useEffect` is an array of values that useEffect should watch, and if one of them changes, useEffect should be called again -- here we are watching the `name` variable which will change when a user selects a new article name to view.
+      - Note 3b: the `useEffect` hook does not allow its anonymous callback function to be asynchronous and use the `async` key word, so we devise a workaround where we create the aysnchronous function `fetchData` inside the callback function
+  - Note 4: We need to make a modification to the `package.json` on the `my-blog` client side and add a property called `proxy`. For the value of this `proxy`, put the address that our server is running at. Here, we're going to use `"proxy": "http://localhost/8000/",`. When we write the URL of requests to our server, for example when we use fetch, we can leave off this whole thing that we wrote for the proxy property. In other words, instead of writing ``fetch(`http://localhost:8000/api/articles/${name}`)`` we can simply write ``fetch(`/api/articles/${name}`)`` and the request will be automatically proxied/prefixed to the address that we defined in the package dot json file.
+- __WARNING:__ be sure to use the `npm start` command has been issued in a termnal window from both the client directory, `my-blog`, and the server directory, `my-blog-backend`. Failure to do so will result in errors! In my case I received a JSON error about an unexpected token: `VM270:1 Uncaught (in promise) SyntaxError: Unexpected token P in JSON at position 0`. I also received a proxy error: `Proxy error: Could not proxy request /api/articles/learn-node from localhost:3000 to http://localhost:8000/.`
+  - From the `my-blog-backend` directory, run `npm start` and expect to see:
+    ```
+    Tims-MacBook-Pro:my-blog-backend tim$ npm start
+
+    > my-blog-backend@1.0.0 start
+    > npx nodemon --exec babel-node src/server.js
+
+    [nodemon] 2.0.15
+    [nodemon] to restart at any time, enter `rs`
+    [nodemon] watching path(s): *.*
+    [nodemon] watching extensions: js,mjs,json
+    [nodemon] starting `babel-node src/server.js`
+    Listening on port 8000
+    ```
+  - From the `my-blog` directory, run `npm start` and expect to see:
+    ```
+    Compiled successfully!
+
+    You can now view my-blog in the browser.
+
+      Local:            http://localhost:3000
+      On Your Network:  http://10.0.0.14:3000
+
+    Note that the development build is not optimized.
+    To create a production build, use npm run build.
+
+    asset static/js/bundle.js 1.73 MiB [emitted] (name: main) 1 related asset
+    asset index.html 1.67 KiB [emitted]
+    asset asset-manifest.json 190 bytes [emitted]
+    cached modules 1.6 MiB (javascript) 28.3 KiB (runtime) [cached] 128 modules
+    webpack 5.70.0 compiled successfully in 3330 ms
+    
+    ```
