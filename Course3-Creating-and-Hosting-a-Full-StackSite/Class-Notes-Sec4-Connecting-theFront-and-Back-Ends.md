@@ -201,3 +201,255 @@
       `import CommentsList from "../components/CommentsList";`
     - Note 2: the state variable, ` articleInfo`, was created with the `useState` hook and will receive the article upvotes and comments from the database based on the name of the article requested:    
       `const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });`
+- __Video 6: Adding an Upvote Button__
+  - In this video we add a component for an upvote button. From the `ArticlePage` component, a user can click the button, and the upvote is tallied and stored in the database by the server.
+  - In the new component, we will have a function that makes a post request using the fetch function to access the article information in the MongoDB database for the article that is being upvoted.
+  - Here is the new `/my-blog/src/components/UpvotesSection.js` component file:
+    ```
+    import React from "react";
+
+    const UpvotesSection = ({ articleName, upvotes, setArticleInfo }) => {
+        const upvoteArticle = async () => {
+            const result = await fetch(`/api/articles/${articleName}/upvote`, {
+                method: 'post',
+            });
+            const body = await result.json();
+            setArticleInfo(body);
+        };
+
+        return (
+            <div id="upvotes-section">
+                <button onClick={() => upvoteArticle()}>Add Upvote</button>
+                <p>This article post has been up voted {upvotes} times</p>
+            </div>
+        );
+    }
+
+    export default UpvotesSection;
+    ```
+    - Note 1: in the component function we return JSX containing paragraph text and a button with an onclick function that kicks off the server fetch and increment code:
+      ```
+      return (
+          <div id="upvotes-section">
+              <button onClick={() => upvoteArticle()}>Add Upvote</button>
+              <p>This article post has been up voted {articleInfo.upvotes} times</p>
+          </div>
+      );
+      ```
+    - Note 2: Separately in the component code, we define an async function, `upvoteArticle`, with the fetching logic:
+      ```
+      const upvoteArticle = async () => {
+          const result = await fetch(`/api/articles/${articleName}/upvote`, {
+              method: 'post',
+          });
+          const body = await result.json();
+          setArticleInfo(body);
+      };
+      ```
+      - Note 2a: Recall that `/my-blog-backend/src/server.js` contains a route pattern that looks responds to a user request, increments an article's upvotes, and returns the updated article information:   
+        `app.post('/api/articles/:name/upvote', (req, res) => { ///... increment upvote count logic ... });`
+    - Note 3: Notice that the component function references the `articleName` and `upvotes` variables as well as the `setArticleInfo` function. None of these are defined in the component, so this is a tip-off that they must be passed to the `UpvotesSection` child component as properties:   
+      `const UpvotesSection = ({ articleName, upvotes, setArticleInfo }) => { ... };`
+  - Next, we need to add the new `UpvotesSection` child component to the `ArticlePage` parent component.
+  - Here is the updated `/my-blog/src/pages/ArticlePage.js` component file:
+    ```
+    import React, { useState, useEffect } from "react";
+    import { useParams } from "react-router-dom";
+    import ArticlesList from "../components/ArticlesList";
+    import CommentsList from "../components/CommentsList";
+    import UpvotesSection from "../components/UpvotesSection";
+    import articleContent from "./article-content";
+    import NotFoundPage from "./NotFoundPage";
+
+    const ArticlePage = ( ) => {
+        const { name } = useParams();
+        const article = articleContent.find(article => article.name === name);
+
+        const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+
+        useEffect(() => {
+            const fetchData = async () => {
+                const result = await fetch(`/api/articles/${name}`);
+                const body = await result.json();
+                console.log(body);
+                setArticleInfo(body);
+            }
+            fetchData();
+        }, [name]);
+
+        if (!article) return <NotFoundPage />
+
+        const otherArticles = articleContent.filter(article => article.name !== name);
+
+        return(
+            <>
+                <h1>{article.title}</h1>
+                <UpvotesSection articleName={name} upvotes={articleInfo.upvotes} setArticleInfo={setArticleInfo} />
+                {article.content.map((paragraph,key) => (
+                    <p key={key}>{paragraph}</p>
+                ))}
+                <CommentsList comments={articleInfo.comments} />
+                <h3>Other Articles:</h3>
+                <ArticlesList articles={otherArticles} />
+            </>
+        );
+    }
+
+    export default ArticlePage;
+    ```
+    - Note 1: we import the `UpvotesSection` component:   
+      `import UpvotesSection from "../components/UpvotesSection";`
+    - Note 2: we add the `UpvotesSection` component beneath the article title and pass the idenitifed properties from above:    
+      ```
+      <h1>{article.title}</h1>
+      <UpvotesSection articleName={name} upvotes={articleInfo.upvotes} setArticleInfo={setArticleInfo} />
+      ```
+- __Video 7-9 Adding an Add Comment Form__
+  - In these videos, we create a new child component file, '/my-blog/src/component/AddCommentForm.js', for an add comments form. This component is a child (i.e., will reside in) the `ArticlePage` component.
+  - The `AddCommentForm` returns JSX code with input fields for user name and comment text with a button that triggers logic to access the MongoDB database through the web server and append the user input to the a specific article's information.
+  - Here is the new '/my-blog/src/component/AddCommentForm.js' component file:
+    ```
+    import React, { useState } from "react";
+
+    const AddCommentForm = ({ articleName, setArticleInfo }) => {
+        const [username, setUsername] = useState('');
+        const [commentText, setCommentText] = useState('');
+
+        const addComment = async () => {
+            const result = await fetch(`/api/articles/${articleName}/add-comment`,{
+                method: 'post',
+                body: JSON.stringify({username, text: commentText}),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const body = await result.json();
+            setArticleInfo(body);
+            setUsername('');
+            setCommentText('');
+        }
+
+        return (
+            <div id = "add-comment-form">
+                <h3>Add a Comment</h3>
+                <label>
+                    Name:
+                    <input type="text" value={username} onChange={(event)=>setUsername(event.target.value)} />
+                </label>
+                <label>
+                    Comment:
+                    <textarea rows = "4" columns = "50" value={commentText} onChange={(event)=>setCommentText(event.target.value)} />
+                </label>
+                <button onClick={()=>addComment()}>Add Comment</button>
+            </div>
+        );
+    };
+
+    export default AddCommentForm;
+    ```
+    - Note 1: Recall that `/my-blog-backend/server.js` has a route pattern for adding a user name and their comment text to an article's database record:    
+      `app.post('/api/articles/:name/add-comment', (req, res) => { //... Logic to accept and append user name and comment text to an article ...}
+    - Note 2: Also recall that the `my-blog` database contains a collection named `articles` that looks like this:
+      ```
+      my-blog> db.articles.find({})
+      [
+        {
+          _id: ObjectId("62543d9f9aba7919f60ada83"),
+          name: 'learn-react',
+          upvotes: 5,
+          comments: [
+            { username: 'Yo', text: 'Yeah!' },
+            { username: 'Me', text: 'Like it!' }
+          ]
+        },
+        {
+          _id: ObjectId("62543d9f9aba7919f60ada84"),
+          name: 'learn-node',
+          upvotes: 11,
+          comments: []
+        },
+        {
+          _id: ObjectId("62543d9f9aba7919f60ada85"),
+          name: 'my-thoughts-on-resumes',
+          upvotes: 2,
+          comments: []
+        }
+      ]
+      ```
+    - Note 3: We return JSX to lay out the user interface form that has a heading, two labeled areas to add text for name and comments, and a submit button. The submit button calls the `addComment` function when there is an `onclick` event:
+      ```
+      return (
+          <div id = "add-comment-form">
+              <h3>Add a Comment</h3>
+              <label>
+                  Name:
+                  <input type="text" />
+              </label>
+              <label>
+                  Comment:
+                  <textarea rows = "4" columns = "50" />
+              </label>
+              <button onClick={()=>addComment()}>Add Comment</button>
+          </div>
+      );
+      ```
+    - Note 4: We import the `useState` hook and create two state variables: `username` and `commentText`:
+      ```
+      const [username, setUsername] = useState('');
+      const [commentText, setCommentText] = useState('');
+      ```
+    - Note 5: We link the state variables to their input fields by adding the value properties coupled with an `onChange` event to the `<input>` and `<textarea>` elements:
+      ```
+      <label>
+          Name:
+          <input type="text" value={username} onChange={(event)=>setUsername(event.target.value)} />
+      </label>
+      <label>
+          Comment:
+          <textarea rows = "4" columns = "50" value={commentText} onChange={(event)=>setCommentText(event.target.value)} />
+      </label>
+      ```
+    - Note 6: We create an `addComment` async function that is triggered when the user clicks on the "add Comment" button and that fetches the current article information with a POST request to the server MongoDB database and appends the username and comment text:
+      ```
+      const addComment = async () => {
+          const result = await fetch(`/api/articles/${articleName}/add-comment`,{
+              method: 'post',
+              body: JSON.stringify({username, text: commentText}),
+              headers: {
+                  'Content-Type': 'application/json',
+              }
+          });
+          const body = await result.json();
+          setArticleInfo(body);
+          setUsername('');
+          setCommentText('');
+      }
+      ```
+      - Note 6a: The variable `result` holds the response from the server from a `fetch` request. In the lengthy `fetch` request we have to attach an options object that 1. specifies the POST method (recall that the default is GET), 2. attaches the body, and 3. specifies in the header that the data is being sent in JSON format:
+        ```
+        const result = await fetch(`/api/articles/${articleName}/add-comment`,{
+            method: 'post',
+            body: JSON.stringify({username, text: commentText}),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        ```
+      - Note 6b: `result` contains the server response which is the updated article information with the added username and comment text. We will store the result in JSON format into the `body` variable, and then use the state variable setter, `setArticleInfo`, to update `articleInfo` variable with the updated information from the MongoDB - including the just-added comment:
+        ```
+        const body = await result.json();
+        setArticleInfo(body);
+        ```
+      - Note 6c: We clear the form fields use the state variable setters:   
+        ```
+        setUsername('');
+        setCommentText('');
+        ```
+    - Note 7: Finally, we add the variable (`articleName`) and function (`setArticleInfo`) that are referenced in, but not defined in, the `AddCommentForm` component as passed properties:   
+      `const AddCommentForm = ({ articleName, setArticleInfo }) => { ...}`
+    
+  - Here is the updated `/my-blog/src/pages/ArticlePage.js` component file:
+    ```
+    
+    ```
+    - Note 1:
