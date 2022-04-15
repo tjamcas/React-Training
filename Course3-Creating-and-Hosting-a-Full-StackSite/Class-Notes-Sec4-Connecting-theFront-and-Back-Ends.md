@@ -445,11 +445,57 @@
         setUsername('');
         setCommentText('');
         ```
+      - Note 6d: Lest we forget, the `addComment` function is triggered by an `onClick` event in the JSX code for the "add COmment" button:   
+        `<button onClick={()=>addComment()}>Add Comment</button>`
     - Note 7: Finally, we add the variable (`articleName`) and function (`setArticleInfo`) that are referenced in, but not defined in, the `AddCommentForm` component as passed properties:   
-      `const AddCommentForm = ({ articleName, setArticleInfo }) => { ...}`
-    
+      `const AddCommentForm = ({ articleName, setArticleInfo }) => { ...}`    
   - Here is the updated `/my-blog/src/pages/ArticlePage.js` component file:
     ```
-    
+    import React, { useState, useEffect } from "react";
+    import { useParams } from "react-router-dom";
+    import ArticlesList from "../components/ArticlesList";
+    import CommentsList from "../components/CommentsList";
+    import UpvotesSection from "../components/UpvotesSection";
+    import AddCommentForm from "../components/AddCommentForm";
+    import articleContent from "./article-content";
+    import NotFoundPage from "./NotFoundPage";
+
+    const ArticlePage = ( ) => {
+        const { name } = useParams();
+        const article = articleContent.find(article => article.name === name);
+
+        const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+
+        useEffect(() => {
+            const fetchData = async () => {
+                const result = await fetch(`/api/articles/${name}`);
+                const body = await result.json();
+                console.log(body);
+                setArticleInfo(body);
+            }
+            fetchData();
+        }, [name]);
+
+        if (!article) return <NotFoundPage />
+
+        const otherArticles = articleContent.filter(article => article.name !== name);
+
+        return(
+            <>
+                <h1>{article.title}</h1>
+                <UpvotesSection articleName={name} upvotes={articleInfo.upvotes} setArticleInfo={setArticleInfo} />
+                {article.content.map((paragraph,key) => (
+                    <p key={key}>{paragraph}</p>
+                ))}
+                <CommentsList comments={articleInfo.comments} />
+                <AddCommentForm articleName={name} setArticleInfo={setArticleInfo} />
+                <h3>Other Articles:</h3>
+                <ArticlesList articles={otherArticles} />
+            </>
+        );
+    }
+
+    export default ArticlePage;
     ```
-    - Note 1:
+    - Note 1: More specifically, we import (`import AddCommentForm from "../components/AddCommentForm";`) and then add the `AddCommentForm` child component to the parent `ArticlePage` component just below the article content and right above the "Other Articles" header:    
+      '<AddCommentForm articleName={name} setArticleInfo={setArticleInfo} />'
