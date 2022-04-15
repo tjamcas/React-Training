@@ -498,4 +498,4 @@
     export default ArticlePage;
     ```
     - Note 1: More specifically, we import (`import AddCommentForm from "../components/AddCommentForm";`) and then add the `AddCommentForm` child component to the parent `ArticlePage` component just below the article content and right above the "Other Articles" header:    
-      '<AddCommentForm articleName={name} setArticleInfo={setArticleInfo} />'
+      `<AddCommentForm articleName={name} setArticleInfo={setArticleInfo} />`
