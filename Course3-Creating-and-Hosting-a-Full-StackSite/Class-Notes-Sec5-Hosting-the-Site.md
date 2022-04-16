@@ -53,3 +53,11 @@
   - /1. In a separate terminal window, from the default directory, start the MongoDB service: `brew services start mongodb-community@5.0`. You may want to rename your terminal window to `Mongo` for ease of use.
   - /2. In the `Mongo` terminal window, open the MongoDB shell: `mongosh`.
   - /3. In a separate terminal window, go to `/my-blog-backend` directory and start the web server: `npm start`
+- __Video 2: Pushing Code to GitHub__
+  - In this video, we will move th `my-blog` app's local files to a hosting service server using GitHub.
+  - This will be a multi-step process:
+    - /1. Create an empty GitHub repository
+    - /2. Push the `my-blog-backend` folder to our GitHub repository
+    - /3. Clone the `my-blog-backend` GitHub repository onto the hosting service server
+  - More specifically,
+     - /1. Initialize the `my-blog-backend` folder:
