@@ -72,4 +72,11 @@
       - `git status` will reurn a scroll of all the files that have been flagged for commit
     - /4. To actually commit (not just flag/identify) files, type:    
       `git commit -m "First commit"` where `"First commit"` is the commit message text
-    - /5. Go to your GitHub account and create a new repository to where we will push our local files
+    - /5. Go to your GitHub account and create a new repository -- name it `my-blog` -- to where we will push our local files.    
+      Copy GitHub commands for "pushing an exisiting repository from the command line:    
+      ```
+      git remote add origin https://github.com/tjamcas/my-blog.git
+      git branch -M main
+      git push -u origin main
+      ```
+      - This will require a GitHub personal access token - go to this link for instructions on setting up a PAT: <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>
