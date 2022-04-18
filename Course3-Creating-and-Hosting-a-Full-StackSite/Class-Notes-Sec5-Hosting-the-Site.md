@@ -80,3 +80,29 @@
       git push -u origin main
       ```
       - This will require a GitHub personal access token - go to this link for instructions on setting up a PAT: <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>
+- __Creating and SSHing into an AWS Server__
+  - First, we need to create an Amazon Web Services EC2 virtual server:
+    - Log into the AWS Management Console
+    - Under "All Services" search and click on "EC2"
+      - An Amazon EC2 instance is a virtual server in Amazon's Elastic Compute Cloud (EC2) for running applications on the Amazon Web Services (AWS) infrastructure.
+    - On the resulting screen - you will see a "Resources" box -  click on "Launch instance"
+    - On the resulting "Launch an instance" screen:
+      - Create a name for your server - e.g., "My blog server"
+      - Scroll down to the "Key pair (login)" box and click on "Create new key pair"
+        - Input a "Key pair name" - e.g., "my-blog-key" -- select RSA type and .pem private key file format, and click on "create key pair"
+      - In "Summary" box on the right side of the window, click on "Launch instance"
+  - Second, we configure our local laptop to be able to SSH into the AWS EC2 server:
+    - Open a terminal window and go to home directory:
+      - Create a ".ssh" directory
+        - Type "ls -al" to see if `.ssh` directory exists
+        - If it doesn't exist, type `mkdir .ssh`
+        - Move the .pem file to the `.ssh` directory:   
+          `mv ~/Downloads/my-blog-key.pem ~/.ssh/my-blog-key.pem`   
+          and type `ls -al .ssh` to confirm the file was moved
+  - Third, 
+    - Return to the AWS management console, go to "Instances", select "My Blog Server", and copy the "Public IPv4 DNS" address
+    - Go to Terminal window and cange permission on the `.ssh/my-blog-server.pem` file:   
+      `chmod 400 ~/.ssh/my-blog-server.pem`
+    - From the terminal window log into the AWS server using the .pem file    
+      `ssh -i ~/.ssh/my-blog-key.pem ec2-user@ec2-99-999-999-99.compute-1.amazonaws.com`    
+      - __NOTE:__ IF you stop and re-start the virtual server, then you will generate a NEW Public IPv4 DNS address
