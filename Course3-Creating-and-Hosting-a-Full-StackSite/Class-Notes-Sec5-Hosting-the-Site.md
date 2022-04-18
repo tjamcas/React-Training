@@ -162,4 +162,24 @@
       ```
 - __Video 5: Running a Full Stack App on AWS__
   - /1. Clone the GitHub repo to AWS
-    - /1a. 
+    - /1a. Copy the link to your GitHub "my-blog" repository
+    - /1b. In the AWS server terminal, type:   
+      `git clone https://github.com/tjamcas/my-blog.git`
+    - /1c. Install Node:
+      Change to the `my-blog` directory:   
+      `cd my-blog`
+      `npm install`
+  - /2. Install the npm package called forever to ensure that the server runs the "my-blog" app continuously:
+    From the AWS terminal window, type:      
+    `npm install -g forever`    
+    Start the "my-blog" app with forever:   
+    `forever start -c "npm start" .`    
+    Confirm that the process is running by typing:    
+    `forever list`
+  - /3.  Since our app is running on port 8000 but we want to be able to access it at the default HTTP port which is 80, we're going to want to map port 80 on our AWS instance to port 8000 on our Node server:    
+    `sudo iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-ports 8000`
+  - /4. Go into AWS console, and ... 
+    - 4a. select AWS EC2 instance for "my-blog" and in the Security tab, note the security group that it uses (e.g. "launch-wizard-1")
+    - 4b. from sidebar, select "Network & Security > Security Groups", select the security group previously noted (e.g. "launch-wizard-1")
+    - 4c. in bottom pane, select "Inbound rules" tab, and then click "Edit inbound rules" button
+    - 4d. click on "Add rule" button, from "Type" dropdown select "HTTP", from "Source" dropdown select either "Anywhere" or "My IP"
