@@ -183,3 +183,12 @@
     - 4b. from sidebar, select "Network & Security > Security Groups", select the security group previously noted (e.g. "launch-wizard-1")
     - 4c. in bottom pane, select "Inbound rules" tab, and then click "Edit inbound rules" button
     - 4d. click on "Add rule" button, from "Type" dropdown select "HTTP", from "Source" dropdown select either "Anywhere" or "My IP"
+    - 4e. From sidebar select "Instances", click on "My Blog Server", and copy "Public IPv4 DNS" address
+  - /5 Paste the IP address into browser, and you should see a working "My Blog" webpage
+
+### Conclusion: AWS Resource Teardown
+#### Terminate the server
+To avoid potential usage minutes and associated charges during trial period, terminate the server using the following steps:
+1. In AWS console, click on "Instances" and select your server instance (in this case, "My Blog Server")
+2. From "Instance State" dropdown, select "Terminate instance".   
+___Note that the Amazon AWS free trial period lasts 12 months - Don't forget to cancel service___
