@@ -64,11 +64,11 @@
        From a terminal window, change directories to `/my-blog-backend`    
        Issue the command: `git init`
     - /2. Create new file `my-blog-backend/.gitignore` with the following single line for content:   
-       `node-modules`
+       `node_modules`
       - This will prevent Git from adding the Node modules, which are very large, to the Git repository. We can install these files from the hosting services server by issuing the command in the server CLI to `run npm install`.
     - /3. In the terminal window, type the command:
       `git add .`
-      - This will identify all the files in `my-blog-backend` (except the node-modules) to be committed the Git repo
+      - This will identify all the files in `my-blog-backend` (except the node_modules directory) to be committed the Git repo
       - `git status` will reurn a scroll of all the files that have been flagged for commit
     - /4. To actually commit (not just flag/identify) files, type:    
       `git commit -m "First commit"` where `"First commit"` is the commit message text
