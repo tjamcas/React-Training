@@ -80,7 +80,7 @@
       git push -u origin main
       ```
       - This will require a GitHub personal access token - go to this link for instructions on setting up a PAT: <https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token>
-- __Creating and SSHing into an AWS Server__
+- __Video 3: Creating and SSHing into an AWS Server__
   - First, we need to create an Amazon Web Services EC2 virtual server:
     - Log into the AWS Management Console
     - Under "All Services" search and click on "EC2"
@@ -105,4 +105,61 @@
       `chmod 400 ~/.ssh/my-blog-server.pem`
     - From the terminal window log into the AWS server using the .pem file    
       `ssh -i ~/.ssh/my-blog-key.pem ec2-user@ec2-99-999-999-99.compute-1.amazonaws.com`    
+      - where `ec2-99-999-999-99.compute-1.amazonaws.com` is the Public IPv4 DNS that you copied in the previous step
       - __NOTE:__ IF you stop and re-start the virtual server, then you will generate a NEW Public IPv4 DNS address
+- __Video 4: Setting Up an AWS Instance__
+  - /1. Install Git on our server instance:   
+    In the terminal window where we are logged into the AWS server instance, type:    
+    `sudo yum install git`
+  - /2. Install NPM on the AWS server - refer to the AWS tutorial <https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html>
+    - /2a. Install node version manager (nvm):    
+      `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash`
+    - /2b. Activate nvm:    
+      `. ~/.nvm/nvm.sh`
+    - /2c. Install your version of node:    
+      `nvm install 16.14.0`
+    - /2d. Install the latest version of npm:   
+      `npm install -g npm@latest`
+  - /3. Install MongoDB on the AWS server - refer to the MongoDB tutorial <https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-amazon/>
+    - /3a. Configure the package management system (yum), in the AWS terminal window:   
+      `sudo nano /etc/yum.repos.d/mongodb-org-5.0.repo`   
+      Edit file and copy in the following lines:    
+      ```
+      [mongodb-org-5.0]
+      name=MongoDB Repository
+      baseurl=https://repo.mongodb.org/yum/amazon/2/mongodb-org/5.0/x86_64/
+      gpgcheck=1
+      enabled=1
+      gpgkey=https://www.mongodb.org/static/pgp/server-5.0.asc
+
+      ```
+    - /3b. Install the MongoDB packages:    
+      `sudo yum install -y mongodb-org`
+    - /3c. Start the MongoDB service:    
+      `sudo service mongod start`
+    - /3d. Open a MongoDB shell:    
+      `mongo` (DEPRECATED) - instead use `mongosh`
+    - /3e. Insert articles for the new database running on the AWS server.    
+      In MongoDB shell, type:
+      `use my-blog`   
+      Followed by:    
+      ```
+      db.articles.insertMany([
+          {
+              name: 'learn-react',
+              upvotes: 0,
+              comments: [],
+          },  {
+              name: 'learn-node',
+              upvotes: 0,
+              comments: [],
+          },  {
+              name: 'my-thoughts-on-resumes',
+              upvotes: 0,
+              comments: [],
+          },
+      ])
+      ```
+- __Video 5: Running a Full Stack App on AWS__
+  - /1. Clone the GitHub repo to AWS
+    - /1a. 
