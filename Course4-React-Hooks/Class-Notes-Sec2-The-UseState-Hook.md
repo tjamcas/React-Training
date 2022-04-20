@@ -157,5 +157,5 @@
     - Note 1: we create a state variable, `selectedStar`, with the `useState` hook in the `StarRating` component.
     - Note 2: the `selected` property, which is a boolean, is declared in the `StarRating` component, and the child `Star` component receives `selected` as a parameter with its default value set to `false`.
     - Note 3: the `onSelectStar` property is a function and it is declared and defined in the parent component `StarRating`. The child `Star` component receives `onSelectStar` as a parameter.
-    - Note 4: in the `Star` component, an `onClick` event is specified in the <FaStar /> element. The `onClick` event calls the `OnSelectStar` function (which is why `onSelectStar` had to be passed as a parameter)
-    - Note 5: in the `StarRating` component, we modified the returned JSX code to include a <p /> paragraph element with dynamic text to clarify the number of stars that are currently selected
+    - Note 4: in the `Star` component, an `onClick` event is specified in the `<FaStar />` element. The `onClick` event calls the `OnSelectStar` function (which is why `onSelectStar` had to be passed as a parameter)
+    - Note 5: in the `StarRating` component, we modified the returned JSX code to include a `<p />` paragraph element with dynamic text to clarify the number of stars that are currently selected
