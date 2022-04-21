@@ -124,4 +124,4 @@ In the presence of side effects, a program's behaviour may depend on history; th
     );
     ```
     - Note: for the final `.then` code, instaed of the abbreviated '.then(setData);', we could have used to the same effect the expanded version:   
-      `.then((res) => setData(res));
+      `.then((res) => setData(res));`
