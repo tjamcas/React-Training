@@ -52,10 +52,20 @@ In the presence of side effects, a program's behaviour may depend on history; th
   - In the following code we created two state variables: `name` and `admin`. We coded two `useEffect` hooks. One `useEffect` fires off a side effect - a message to the console - when the `name` state variable changes. The second `useEffect` fires off a side effect - a different message to the console - when the `admin` state variable changes.
   - Here is the code in `/src/index.js`:
     ```
-    );
+    import React, { useState, useEffect } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const [name, setName] = useState("James");
+      const [admin, setAdmin] = useState(false);
+      
+      useEffect(() => {
+        console.log(`Celebrate ${name}`);
+        }, [name]);
       useEffect(() => {
         console.log(`The user is ${admin ? "admin" : "not admin"}.`);
-       });
+       }, [admin]);
 
       return (
         <section>
@@ -74,3 +84,44 @@ In the presence of side effects, a program's behaviour may depend on history; th
       document.getElementById("root")
     );
     ```
+- __Video 3: Fetching Data With useEffect__
+  - The following code demonstrates a pattern that utilizes `useEffect` to fetch data from an external source to populate a webpage:
+    ```
+    import React, { useState, useEffect } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const [data, setData] = useState([]);
+
+      useEffect(() => {
+        fetch(`https://api.github.com/users`)
+          .then((response) => response.json())
+          .then(setData);
+      }, []);
+
+      if (data) {
+        return (
+          <ul>
+            {data.map((user) => (
+              <li key={user.id}>{user.login}</li>
+            ))}
+          </ul>
+          <button onClick={() => setData([])}>Remove Data</button>
+        );
+      }
+
+      return (
+        <p>No Users</p>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
+    - Note: for the final `.then` code, instaed of the abbreviated '.then(setData);', we could have used to the same effect the expanded version:   
+      `.then((res) => setData(res));
