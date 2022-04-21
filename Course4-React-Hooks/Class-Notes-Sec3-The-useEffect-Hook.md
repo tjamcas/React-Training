@@ -2,7 +2,7 @@
 ## Class Notes / Section 3
 
 ### Section 3: The useEffect Hook
-- __Video 4: Introducing useEffect__
+- __Video 1: Introducing useEffect__
   - Side Effect - formal definition: in computer science, an operation, function or expression is said to have a side effect if it modifies some state variable value(s) outside its local environment, that is to say has an observable effect besides returning a value (the primary effect) to the invoker of the operation. Example side effects include:
     - modifying a non-local variable, 
     - modifying a static local variable, 
@@ -16,10 +16,6 @@ In the presence of side effects, a program's behaviour may depend on history; th
     import ReactDOM from 'react-dom';
     import './index.css';
 
-    /**
-     * App is the parent component
-     * Note 1A: App creates a property named totalStars that is equal to the JS expression, the integer 10
-     */
     function App() {
       const [name, setName] = useState("James");
       useEffect(() => {
@@ -49,3 +45,32 @@ In the presence of side effects, a program's behaviour may depend on history; th
         document.title = `Celebrate ${name}`;
         });
       ```
+- __Video 2: Working with the Dependency Array__
+  - We can add a dependency array as a second argument to the `useEffect` function. The dependency array contains the names of the variables that we want to monitor for a change in value that will trigger the `useEffect` callback function. In other words, if the variable(s) listed in the dependency array change, then we want to fire off the side effect.
+  - If you specify an empty array as your second argument, then the side effect fires off once on first render of the component where `useEffect` resides.
+  - If you do not specify a second argument with your dependency array, then the side effect will fire off any time their is a change in the component where the `useEffect` function resides.
+  - In the following code we created two state variables: `name` and `admin`. We coded two `useEffect` hooks. One `useEffect` fires off a side effect - a message to the console - when the `name` state variable changes. The second `useEffect` fires off a side effect - a different message to the console - when the `admin` state variable changes.
+  - Here is the code in `/src/index.js`:
+    ```
+    );
+      useEffect(() => {
+        console.log(`The user is ${admin ? "admin" : "not admin"}.`);
+       });
+
+      return (
+        <section>
+          <p>Congratulations {name}!</p>
+          <button onClick={() => setName("Tim")}>Change Winner</button>
+          <p>{admin ? "logged in" : "not logged in"}</p>
+          <button onClick={() => setAdmin(true)}>Log in</button>
+        </section>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
