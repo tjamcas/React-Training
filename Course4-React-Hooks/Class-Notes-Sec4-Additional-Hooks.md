@@ -35,3 +35,66 @@
     );
     ```
     - Note: in this line of code, `<h1 onClick={() => setNumber(1)}>{number}</h1>`, the argument to setNumber (i.e., the number "1") gets mapped to the variable `newNumber` in the reducer function.
+- __Video 2: Refactoring useState to useReducer__
+  - Recall the `index.js` file to create a dynamic checkbox using `useState`:
+    ```
+    import React, { useState } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const [checked, setChecked] = useState(false);
+
+      return (
+        <>
+          <input 
+            type="checkbox"
+            value={checked}
+            onChange= {() => setChecked((checked)=> !checked)}
+          />
+        {checked ? "checked" : "not checked"}
+        </>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
+  - We can refactor this code with the `useReducer` hook:
+    ```
+    import React, { useReducer } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const [checked, toggle] = useReducer(
+        (checked)=> !checked,
+        false
+      );
+
+      return (
+        <>
+          <input 
+            type="checkbox"
+            value={checked}
+            onChange= {toggle}
+          />
+        {checked ? "checked" : "not checked"}
+        </>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
+    - Note 1: `checked` is still the state variable.
+    - Note 2: instead of naming the state setter function to `setChecked`, it is more accurately named `toggle`
+    - Note 3: for the reducer function, we use the same logic as before: `(checked)=> !checked)`
