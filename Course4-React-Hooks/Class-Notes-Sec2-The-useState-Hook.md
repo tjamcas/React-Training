@@ -4,7 +4,7 @@
 ### Section 2: The useState Hook
 - __Video 4: Working with Component Trees__
   - Rather than create a separate `index.js` file as our application entry point and a separate `App.js` file that functions as our parent component to the application, we will merge the two files and define an `App` component function in `index.js`. We do this so that we can see the logic for the component tree more readily in one file. In common practice, you would maintain two separate files for `index.js` and `app.js`.
-  - Here is basic JavaScript/JSX logic to display stars in the file `/src/index.js` - note the comments in the code:
+  - Here is basic JavaScript/JSX logic to display stars in the file `/src/index.js` - note the comments in the code:    
   ```
   import React from 'react';
   import ReactDOM from 'react-dom';
