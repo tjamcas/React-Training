@@ -158,3 +158,21 @@
       document.getElementById("root")
     );
     ```
+    - Note 1: if we had not defined the `reducer` function outside of the `useReducer` statement, and instead embedded the `reducer` code directly in the `useReducer` staement, the cde logic would be written as follows:
+      ```
+      const [state, dispatch] = useReducer(
+        (state, action) => {
+          switch (action.type) {
+            case "yell":
+              return {
+                message: `HEY! I JUST SAID ${state.message}`
+              };
+            case "whisper":
+              return {
+                message: `excuse me. I just said ${state.message}`
+              };
+          }
+        },
+        initialState
+      );
+      ```
