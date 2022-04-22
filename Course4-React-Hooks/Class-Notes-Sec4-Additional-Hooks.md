@@ -158,7 +158,7 @@
       document.getElementById("root")
     );
     ```
-    - Note 1: if we had not defined the `reducer` function outside of the `useReducer` statement, and instead embedded the `reducer` code directly in the `useReducer` staement, the cde logic would be written as follows:
+    - Note 1: if we had not defined the `reducer` function outside of the `useReducer` statement, and instead embedded the `reducer` code directly in the `useReducer` statement, the code logic would be written as follows:
       ```
       const [state, dispatch] = useReducer(
         (state, action) => {
