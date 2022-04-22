@@ -9,6 +9,7 @@
     - more specifically, as an example:   
       `const [number, setNumber] = useReducer((number, newNumber) => number + newNumber, 0);`    
     - Note: the first parameter in the reducer function is the state variable, `number`.
+    - Note: the second parameter is the reducer function and this function is executed when we call the set `setState` funtion - in this case, `setNumber`. It returns a single value which is stored in the state variable - in this case `number`.
     - Recall: a reducer function takes in multiple values and returns a single value -- see article: <https://css-tricks.com/getting-to-know-the-usereducer-react-hook/>
   - Here is an example of the `useReducer` function in action -- it increments by one the value in the `<h1>` element everytime the element is clicked:
     ```
@@ -33,3 +34,4 @@
       document.getElementById("root")
     );
     ```
+    - Note: in this line of code, `<h1 onClick={() => setNumber(1)}>{number}</h1>`, the argument to setNumber (i.e., the number "1") gets mapped to the variable `newNumber` in the reducer function.
