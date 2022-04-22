@@ -11,10 +11,10 @@
       import './index.css';
       import { FaStar } from "react-icons/fa";
 
-        /**
-         * createArray is a helper function that takes an integer input, named length, and creates 
-         * an array of length
-        */
+      /**
+       * createArray is a helper function that takes an integer input, named length, and creates 
+       * an array of length
+       */
 
       const createArray = (length) => [
         ...Array(length)
@@ -25,21 +25,21 @@
         return <FaStar />
       }
 
-        /**
-         * StarRating is the child component to App
-         * StarRating is the parent to the Star component
-         * StarRating receives the property totalStars from App
-         */
+      /**
+       * StarRating is the child component to App
+       * StarRating is the parent to the Star component
+       * StarRating receives the property totalStars from App
+       */
       function StarRating({totalStars}) {
         return createArray(totalStars).map((n, i) => (
           <Star key={i} />
         ));
       }
 
-        /**
-         * App is the parent component
-         * Note 1A: App creates a property named totalStars that is equal to the JS expression, the integer 10
-         */
+      /**
+       * App is the parent component
+       * Note 1A: App creates a property named totalStars that is equal to the JS expression, the integer 10
+       */
       function App() {
         return <StarRating totalStars = {10} />
       }
