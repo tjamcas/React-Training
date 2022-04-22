@@ -98,3 +98,63 @@
     - Note 1: `checked` is still the state variable.
     - Note 2: instead of naming the state setter function to `setChecked`, it is more accurately named `toggle`
     - Note 3: for the reducer function, we use the same logic as before: `(checked)=> !checked)`
+- __Video 3: Dispatching Actions With useReducer__
+  - We can use `useReducer` to execute a list of actions.
+  - We can re-write the syntax pattern as follows:    
+    ```
+    const [state, dispatch] = useReducer(   
+      reducer,    
+      initialState    
+    );
+    ```
+  - A "reducer" function takes in a `state`, and an `action`, and returns a new `state` - here is the pattern for a reducer function:   
+    ```
+    function reducer(state, action) {
+      // reducer logic goes here
+    }
+    ```
+  - The full code for `index.js` is:
+    ```
+    import React, { useReducer } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const initialState = {
+        message: "hi"
+      }
+
+      function reducer(state, action) {
+        switch (action.type) {
+          case "yell":
+            return {
+              message: `HEY! I JUST SAID ${state.message}`
+            };
+          case "whisper":
+            return {
+              message: `excuse me. I just said ${state.message}`
+            };
+        }
+      }
+
+      const [state, dispatch] = useReducer(
+        reducer,
+        initialState
+      );
+
+      return (
+        <>
+          <p>Message: {state.message}</p>
+          <button onClick={() => dispatch({type:"yell"})}>YELL</button>
+          <button onClick={() => dispatch({type:"whisper"})}>whisper</button>
+        </>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
