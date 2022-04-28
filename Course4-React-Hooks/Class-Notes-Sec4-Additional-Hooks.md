@@ -244,3 +244,62 @@
     );
     ```
   - With the ability to access a `ref`, instead of just printing an alert to the screen, we could do something more useful like accessing the value in a form and writing that value to a record in a database.
+- __Video 5: Creating Controlled Components with useRef__
+  - Controlled components is another pattern, instead of using `ref`'s, to handle inputs in a form. 
+  - A controlled component handles form inputs using state variables with the `useState` React hook.
+  - We can refactor the code from the previous video to implement controlled components with `useState`:
+    ```
+    import React, { useState } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const [sound, setSound] = useState("");
+      const [color, setColor] = useState("#000000");
+
+      const submit = (e) => {
+        e.preventDefault();
+        alert(`${sound} sounds like ${color}`);
+        setSound("");
+        setColor("#000000");
+      };
+
+      return (
+        <form onSubmit={submit}>
+          <input value = {sound} type = "text" placeholder="Sound..." 
+          onChange={(e) => setSound(e.target.value)}
+          />
+          <input value = {color} type = "color" 
+          onChange={(e) => setColor(e.target.value)}
+          />
+          <button>ADD</button>
+        </form>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
+    - Note: we declare two state variables, `sound` and `color`, and their associated _setters_ with the useState hook:
+      ```
+      const [sound, setSound] = useState("");
+      const [color, setColor] = useState("#000000");
+      ```
+    - Note: we use the input elements to set the state.
+      - When the text input field changes, we set the `sound` state variable:
+        ```
+        <input value = {sound} type = "text" placeholder="Sound..." 
+        onChange={(e) => setSound(e.target.value)}
+        />
+        ```
+      - Similarly, when the color input field changes, we set the `color` state variable:
+        ```
+        <input value = {color} type = "color" 
+        onChange={(e) => setColor(e.target.value)}
+        />
+        ```
+  - This is called a controlled component because React controls the state of the form and its values. In the previous video example, the DOM directly manages the state of the form using `ref`'s.
