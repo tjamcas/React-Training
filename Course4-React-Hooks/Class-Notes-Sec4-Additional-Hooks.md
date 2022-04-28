@@ -176,3 +176,71 @@
         initialState
       );
       ```
+- __Video 4: Managing Form Inputs with useRef__
+  - useRef accesses a component and determines its value -- this can be extremely useful, particularly with forms.
+  - In the following example, we want the user to type a sound into a text input box, and select a color from a color input box that corresponds.
+  - In React, a `ref` is an object that stores values about a DOM element/node for the lifetime of a component.
+  - The useRef hook creates a `ref`
+  - The following declarations creates two `ref`'s:
+    ```
+    const sound = useRef();
+    const color = useRef();
+    ```
+  - We add the `ref` into each of the input elements:
+    ```
+    <input ref = {sound} type = "text" placeholder="Sound..." />
+    <input ref = {color} type = "color" />
+    ```
+  - The logic for handling the submission of the form is placed in a `submit` function that accesses the value of each `ref`:
+    ```
+    const submit = (e) => {
+      e.preventDefault();
+      const soundVal = sound.current.value;
+      const colorVal = color.current.value;
+      alert(`${soundVal} sounds like ${colorVal}`);
+    };
+    ```
+    - Note that the line, `e.preventDefault();` prevents the default behavior of re-loading the page, which allows us to access the value in the `ref`'s we created.
+    - Note also that `.current.value` is an attribute of the `ref` we created
+  - We create an `onSubmit` event handler for when the form's "ADD" button is clicked to submit the page:
+    ```
+    <form onSubmit={submit}>
+      ...
+    </form>
+    ```
+  - Here is the full code:
+    ```
+    import React, { useRef } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+
+    function App() {
+      const sound = useRef();
+      const color = useRef();
+
+      const submit = (e) => {
+        e.preventDefault();
+        const soundVal = sound.current.value;
+        const colorVal = color.current.value;
+        alert(`${soundVal} sounds like ${colorVal}`);
+        sound.current.value = "";
+        color.current.value = "";
+      };
+
+      return (
+        <form onSubmit={submit}>
+          <input ref = {sound} type = "text" placeholder="Sound..." />
+          <input ref = {color} type = "color" />
+          <button>ADD</button>
+        </form>
+      );
+    }
+
+    ReactDOM.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>,
+      document.getElementById("root")
+    );
+    ```
+  - With the ability to access a `ref`, instead of just printing an alert to the screen, we could do something more useful like writing the value to a record in a database.
