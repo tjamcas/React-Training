@@ -243,4 +243,4 @@
       document.getElementById("root")
     );
     ```
-  - With the ability to access a `ref`, instead of just printing an alert to the screen, we could do something more useful like writing the value to a record in a database.
+  - With the ability to access a `ref`, instead of just printing an alert to the screen, we could do something more useful like accessing the value in a form and writing that value to a record in a database.
