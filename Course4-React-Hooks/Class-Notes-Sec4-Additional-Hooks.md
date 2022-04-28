@@ -1,7 +1,7 @@
 # Course 4: React Hooks
 ## Class Notes / Section 4
 
-### Section 3: Additional Hooks
+### Section 4: Additional Hooks
 - __Video 1: Handling Complex State With useReducer__
   - The `useReducer` hook can also be used to manage state variables
   - Syntax:   
