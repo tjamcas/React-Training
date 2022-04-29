@@ -87,3 +87,83 @@
       };
       ```
 - __Video 2: Placing Data in Context__
+  - In apps where there are many nested components, and in which some or all of the components share data, it is difficult to share data by passing `props` between neted components. Instead we can use `createContext` to put shared data in context that is accessible by all child components.
+  - Here is the full code to use `createContext` to put an array of data into context in the file `src/index.js`:
+    ```
+    import React, { createContext } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+    import App from './App';
+
+    export const TreesContext = createContext();
+
+    const trees = [
+      {id: "1", type: "Maple"},
+      {id: "2", type: "Oak"},
+      {id: "3", type: "Birch"},
+      {id: "4", type: "Alder"},
+      {id: "5", type: "Red Pine"},
+    ]
+
+
+    ReactDOM.render(
+      <TreesContext.Provider value={{ trees }}>
+        <App />
+      </TreesContext.Provider>,
+      document.getElementById("root")
+    );
+    ```
+    - Note 1: We import `createContext` and use it to create a context "container":   
+      `export const TreesContext = createContext();`
+    - Note 2: We create the context values, in a variable named `trees`, which is an array of objects:
+      ```
+      const trees = [
+        {id: "1", type: "Maple"},
+        {id: "2", type: "Oak"},
+        {id: "3", type: "Birch"},
+        {id: "4", type: "Alder"},
+        {id: "5", type: "Red Pine"},
+      ]
+      ```
+    - Note 3: We wrap the `<App>` component in the context provider, `TreesContext.Provider`, and we pass the data that we want accessible to the `<App>` component and all of its children components through the `value` property. In this case, we want to pass the `trees` array variable:
+      ```
+      ReactDOM.render(
+        <TreesContext.Provider value={{ trees }}>
+          <App />
+        </TreesContext.Provider>,
+        document.getElementById("root")
+      );
+      ```
+  - Here is the full code for the component file, `src/app.js`:
+    ```
+    import './App.css';
+    import { TreesContext } from './';
+    import { useContext } from 'react';
+
+    function App() {
+      const { trees } = useContext(TreesContext);
+      return (
+        <div>
+          <h1>Trees in the Forest</h1>
+          {trees.map((tree)=> (
+            <li key={tree.id}>{tree.type}</li>
+            ))}
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 4: We import the `TreesContext`container variable from the `src/index.js` file:    
+      `import { TreesContext } from './';`
+    - Note 5: We import the `useContext` React hook:    
+      `import { useContext } from 'react';`
+    - Note 6: `useContext` returns an object from which we can deconstruct the `trees` array:   
+      `const { trees } = useContext(TreesContext);`
+    - Note 7: we can iterate through the `trees` array to create list items:
+      ```
+      <h1>Trees in the Forest</h1>
+      {trees.map((tree)=> (
+        <li key={tree.id}>{tree.type}</li>
+        ))}
+      ```
