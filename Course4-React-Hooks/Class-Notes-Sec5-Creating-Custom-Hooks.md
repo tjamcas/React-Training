@@ -86,7 +86,7 @@
         resetColor();
       };
       ```
-- __Video 2: Placing Data in Context__
+- __Video 2: Placing Data in Context / Video 3: Retrieving Data with useContext__
   - In apps where there are many nested components, and in which some or all of the components share data, it is difficult to share data by passing `props` between neted components. Instead we can use `createContext` to put shared data in context that is accessible by all child components.
   - Here is the full code to use `createContext` to put an array of data into context in the file `src/index.js`:
     ```
@@ -167,3 +167,62 @@
         <li key={tree.id}>{tree.type}</li>
         ))}
       ```
+- __Video 4: Creating a Custom Hook with Context__
+  - We can make it even simpler for children components to access shared context by creting a custom hook.
+  - The full code for `index.js` follows:
+    ```
+    import React, { createContext, useContext } from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+    import App from './App';
+
+    const TreesContext = createContext();
+    export const useTrees = () =>
+      useContext(TreesContext);
+
+    const trees = [
+      {id: "1", type: "Maple"},
+      {id: "2", type: "Oak"},
+      {id: "3", type: "Birch"},
+      {id: "4", type: "Alder"},
+      {id: "5", type: "Red Pine"},
+    ]
+
+
+    ReactDOM.render(
+      <TreesContext.Provider value={{ trees }}>
+        <App />
+      </TreesContext.Provider>,
+      document.getElementById("root")
+    );
+    ```
+    - Note 1: We import `useContext` into `index.js`.
+    - Note 2: we will not export the context `TreesContext`, and instead we will create and export a custom hook named `useTrees`:
+      ```
+      const TreesContext = createContext();
+      export const useTrees = () =>
+        useContext(TreesContext);
+      ```
+  - The refactored code for `app.js` follows:
+    ```
+    import './App.css';
+    import { useTrees } from './';`
+ 
+    function App() {
+      const { trees } = useTrees();
+      return (
+        <div>
+          <h1>Trees in the Forest</h1>
+          {trees.map((tree)=> (
+            <li key={tree.id}>{tree.type}</li>
+            ))}
+        </div>
+      );
+    }
+
+    export default App;
+    ```
+    - Note 3: we import the custom hook `useTrees`:   
+      `import { useTrees } from './';`
+    - Note 4: calling `useTrees()` is more concise and readable than calling `useContext(TreesContext)` as we did before refactoring:    
+      `const { trees } = useTrees();`
