@@ -87,7 +87,7 @@
       };
       ```
 - __Video 2: Placing Data in Context / Video 3: Retrieving Data with useContext__
-  - In apps where there are many nested components, and in which some or all of the components share data, it is difficult to share data by passing `props` between neted components. Instead we can use `createContext` to put shared data in context that is accessible by all child components.
+  - In apps where there are many nested components, and in which some or all of the components share data, it is difficult to share data by passing `props` between nested components. Instead we can use `createContext` to put shared data in context that is accessible by all child components.
   - Here is the full code to use `createContext` to put an array of data into context in the file `src/index.js`:
     ```
     import React, { createContext } from 'react';
@@ -160,6 +160,7 @@
       `import { useContext } from 'react';`
     - Note 6: `useContext` returns an object from which we can deconstruct the `trees` array:   
       `const { trees } = useContext(TreesContext);`
+      - from the React Documentation at <https://reactjs.org/docs/hooks-reference.html#usecontext>, useContext accepts a context object (the value returned from React.createContext) and returns the current context value for that context. The current context value is determined by the `value` prop of the nearest `<MyContext.Provider>` above the calling component in the tree.
     - Note 7: we can iterate through the `trees` array to create list items:
       ```
       <h1>Trees in the Forest</h1>
@@ -226,3 +227,76 @@
       `import { useTrees } from './';`
     - Note 4: calling `useTrees()` is more concise and readable than calling `useContext(TreesContext)` as we did before refactoring:    
       `const { trees } = useTrees();`
+- __Video 5: Data Fetching with a Fetch Hook__
+  - In this video, we fetch data with a custom hook
+  - The custom hook must handle three possible states when fetching data: 1. Loading data, 2. Fetched data successfully, 3. Error in fetching data
+  - We create a the custom hook in the file `src/useFetch.js` - here is the entire file
+    ```
+    // This custom hook handles the three possible states when attempting to fetch data:
+    // 1. Loading data, 2. Fetched data successfully, 3. Error in fetching data
+
+    import { useState, useEffect} from "react";
+
+    export function useFetch(uri) {
+        const [loading, setLoading] = useState(true);
+        const [data, setData] = useState();
+        const [error, setError] = useState();
+
+        useEffect(() => {
+            if (!uri) return;
+            fetch(uri)
+            .then(data => data.json())
+            .then((res) => setData(res))
+            .then(()=>setLoading(false))
+            .catch(setError);
+        }, [uri]);
+        return { loading, data, error };
+    }
+    ```
+    - Note 1: we export the custom hook: `export function useFetch(uri) { // hook function logic }`
+    - Note 2: within the `usefech` function, we create state variables for the three possible fetching states/conditions:
+      ```
+      const [loading, setLoading] = useState(true);
+      const [data, setData] = useState();
+      const [error, setError] = useState();
+      ```
+    - Note 3: We use the `useEffect` hook to fetch the data and handle changes in the state variables:
+      ```
+      useEffect(() => {
+          if (!uri) return;
+          fetch(uri)
+          .then(data => data.json())
+          .then((res) => setData(res))
+          .then(()=>setLoading(false))
+          .catch(setError);
+      }, [uri]);
+      ```
+      - Note 3a: we could have use the abbreviated expression `.then(setData)`, rather than the expanded expression `.then((res) => setData(res))` used above
+      - Note 3b: for the dependency array (i.e., the second argument in the `useEffect` hook), we specify the `uri` variable. We want the useEffect callback function to execute on the first rendering and when there is a change in the `uri` that is specified.
+    - Note 4: the custom hook returns the three state variables:    
+      `return { loading, data, error };`
+- __Video 6: Building a Fetch Component__
+  - In this demo, we create the `<App>` component in the `src/index.js` file. Here is full `index.js` file:
+    ```
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import './index.css';
+    import { useFetch } from './useFetch';
+
+    function App({ login }) {
+      const { loading, data, error } = useFetch(`https://api.github.com/users/${login}`);
+      if (loading) return (<h1>Loading...</h1>);
+      if (error) return (<pre>{JSON.stringify(error, null, 2)}</pre>);
+      return (
+        <div>
+          <pre>{JSON.stringify(data, null, 2)}</pre>
+        </div>
+      );
+    }
+
+    ReactDOM.render(
+      <App login="github-username" />,
+      document.getElementById("root")
+    );
+    ```
+    - Note 1: This code will return the github user record for `login="github-username"`, where you can substitute a user name for github-username
